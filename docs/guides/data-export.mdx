@@ -1,5 +1,5 @@
 ---
-title: "Export Your Envoy Data: Reports and Backups"
+title: "Export Envoy Workspace Data: Reports, Logs, and Backups"
 sidebarTitle: "Data Export"
 description: "Export workspace data as CSV, JSON, or XLSX for reporting, auditing, backups, and GDPR data portability requests — on demand or on a schedule."
 ---
@@ -79,7 +79,7 @@ curl "https://api.envoy.com/v1/reports?dataset=members&format=json&start=2024-01
 The API returns the file as a direct download stream. For large exports, Envoy may respond with a `202 Accepted` and a job ID — poll `GET /v1/reports/jobs/{job_id}` to check status and retrieve the download URL when the job completes.
 
 <Note>
-  Envoy retains activity logs and integration logs for **12 months** on the Standard plan and **36 months** on the Enterprise plan. Export data you need to keep longer before it ages out of the retention window. Billing records are retained for 7 years to meet standard accounting requirements regardless of plan.
+  Envoy retains activity logs and integration logs for **12 months** on the Starter and Growth plans and **36 months** on the Enterprise plan. Export data you need to keep longer before it ages out of the retention window. Billing records are retained for 7 years to meet standard accounting requirements regardless of plan.
 </Note>
 
 ## GDPR and data portability

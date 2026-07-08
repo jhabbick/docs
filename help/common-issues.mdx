@@ -1,5 +1,5 @@
 ---
-title: "Common Issues and How to Fix Them in Envoy"
+title: "Common Envoy Issues: Troubleshooting Guide and Fixes"
 sidebarTitle: "Common Issues"
 description: "Step-by-step troubleshooting for the most frequent Envoy problems including login failures, notification issues, API errors, and lost 2FA access."
 ---
@@ -51,7 +51,7 @@ Even the best software has the occasional hiccup. This page walks you through so
 
     1. **Confirm your API key is correct.** Copy your API key directly from **Settings → API → API Keys** to avoid typos or invisible whitespace characters.
     2. **Check the Authorization header format.** Envoy expects the key in the `Authorization` header using Bearer token format:
-       ```
+       ```http
        Authorization: Bearer YOUR_API_KEY
        ```
     3. **Check if the key has been revoked.** If the key doesn't appear in **Settings → API → API Keys**, it may have been deleted. Generate a new one.

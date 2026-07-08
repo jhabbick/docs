@@ -1,16 +1,16 @@
 ---
-title: "REST API Endpoints: Workspaces, Users, Reports"
+title: "Envoy API Endpoints: Workspaces, Users, and Integrations"
 sidebarTitle: "Endpoints"
-description: "Complete reference for Envoy REST API endpoints covering workspaces, user management, and report retrieval with request and response details."
+description: "Complete reference for Envoy REST API endpoints covering workspaces, users, integrations, and reports with request and response details."
 ---
 
-The Envoy API exposes endpoints for managing the core resources on your account: workspaces, users, and reports. Each section below documents the available operations, the parameters they accept, and the shape of their responses. All requests require a valid Bearer token in the `Authorization` header — see the [Authentication guide](/docs/api/authentication) if you have not set that up yet.
+The Envoy API exposes endpoints for managing the core resources on your account: workspaces, users, integrations, and reports. Each section below documents the available operations, the parameters they accept, and the shape of their responses. All requests require a valid Bearer token in the `Authorization` header — see the [Authentication guide](/docs/api/authentication) if you have not set that up yet.
 
 ---
 
 ## Workspaces
 
-Workspaces are the top-level organizational unit in Envoy. You can list all workspaces your API key has access to, create new ones, and manage them individually.
+Workspaces are the top-level organizational unit in Envoy. You can list all workspaces your API key has access to and create new ones.
 
 ### GET /workspaces
 
@@ -116,7 +116,7 @@ curl -X POST https://api.envoy.com/v1/workspaces \
 
 ## Users
 
-The Users endpoints let you list members of a workspace and invite or remove users. User operations are scoped to a specific workspace via the `workspace_id` parameter.
+The Users endpoints let you list members of a workspace, invite new users, and remove existing ones. User operations are scoped to a specific workspace via the `workspace_id` parameter.
 
 ### GET /users
 
@@ -205,6 +205,135 @@ curl -X POST https://api.envoy.com/v1/users \
 }
 ```
 
+### DELETE /users/:id
+
+Remove a user from a workspace. The user loses access immediately. This action requires an `admin`-scoped API key.
+
+**Path parameter:**
+
+<ParamField path="id" type="string" required>
+  The ID of the user to remove, prefixed with `usr_`.
+</ParamField>
+
+**Query parameter:**
+
+<ParamField query="workspace_id" type="string" required>
+  The ID of the workspace to remove the user from.
+</ParamField>
+
+```bash
+curl -X DELETE "https://api.envoy.com/v1/users/usr_09ABZ1M2Q?workspace_id=ws_01HXZ3K9P" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+A successful deletion returns HTTP `204 No Content` with an empty body.
+
+---
+
+## Integrations
+
+The Integrations endpoints let you list, connect, and disconnect third-party integrations for a workspace. Integration operations require a `write` or `admin`-scoped API key for write actions.
+
+### GET /integrations
+
+Retrieve a list of integrations connected to a workspace.
+
+**Query parameters:**
+
+<ParamField query="workspace_id" type="string" required>
+  The ID of the workspace whose integrations you want to list.
+</ParamField>
+
+<ParamField query="limit" type="integer" default="20">
+  Number of records to return. Maximum is `100`.
+</ParamField>
+
+<ParamField query="cursor" type="string">
+  Pagination cursor returned by a previous response. Omit on the first request.
+</ParamField>
+
+```bash
+curl "https://api.envoy.com/v1/integrations?workspace_id=ws_01HXZ3K9P" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+**Example response:**
+
+```json
+{
+  "data": [
+    {
+      "id": "int_04CKY8S6U",
+      "workspace_id": "ws_01HXZ3K9P",
+      "provider": "slack",
+      "status": "connected",
+      "connected_at": "2024-06-02T11:00:00Z"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "limit": 20,
+    "next_cursor": null
+  }
+}
+```
+
+### POST /integrations
+
+Connect a new integration to a workspace.
+
+**Request parameters:**
+
+<ParamField body="workspace_id" type="string" required>
+  The ID of the workspace to connect the integration to.
+</ParamField>
+
+<ParamField body="provider" type="string" required>
+  The identifier for the integration provider (for example, `"slack"` or `"github"`).
+</ParamField>
+
+<ParamField body="config" type="object">
+  Provider-specific configuration object. Refer to each provider's documentation for the expected fields.
+</ParamField>
+
+```bash
+curl -X POST https://api.envoy.com/v1/integrations \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"workspace_id": "ws_01HXZ3K9P", "provider": "slack", "config": {}}'
+```
+
+**Example response:**
+
+```json
+{
+  "data": {
+    "id": "int_04CKY8S6U",
+    "workspace_id": "ws_01HXZ3K9P",
+    "provider": "slack",
+    "status": "connected",
+    "connected_at": "2024-06-02T11:00:00Z"
+  }
+}
+```
+
+### DELETE /integrations/:id
+
+Disconnect an integration from a workspace. This immediately stops all data exchange with the connected provider.
+
+**Path parameter:**
+
+<ParamField path="id" type="string" required>
+  The ID of the integration to disconnect, prefixed with `int_`.
+</ParamField>
+
+```bash
+curl -X DELETE https://api.envoy.com/v1/integrations/int_04CKY8S6U \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+A successful deletion returns HTTP `204 No Content` with an empty body.
+
 ---
 
 ## Reports
@@ -267,14 +396,16 @@ curl "https://api.envoy.com/v1/reports?format=json&range=30d&workspace_id=ws_01H
 
 All endpoints use standard HTTP status codes. When an error occurs, the response body contains an `error` object with a machine-readable `code` and a human-readable `message`.
 
-| Status | Code                  | Description                                                     |
-|--------|-----------------------|-----------------------------------------------------------------|
-| `400`  | `bad_request`         | The request is malformed or missing required parameters.        |
-| `401`  | `unauthorized`        | The API key is missing or invalid.                              |
-| `403`  | `forbidden`           | The API key lacks the required scope for this operation.        |
-| `404`  | `not_found`           | The requested resource does not exist.                          |
-| `429`  | `rate_limit_exceeded` | You have exceeded your plan's request-per-minute limit.         |
-| `500`  | `internal_error`      | An unexpected error occurred on Envoy's servers.                |
+| Status | Code                  | Description                                                                          |
+|--------|-----------------------|--------------------------------------------------------------------------------------|
+| `400`  | `bad_request`         | The request is malformed or missing required parameters. Check your request body and query parameters. |
+| `401`  | `unauthorized`        | The API key is missing or invalid. Verify your `Authorization` header.               |
+| `403`  | `forbidden`           | The API key lacks the required scope for this operation. Use a key with a higher scope. |
+| `404`  | `not_found`           | The requested resource does not exist. Double-check the ID in your request.          |
+| `409`  | `conflict`            | A resource with the same unique identifier already exists (for example, a duplicate workspace slug). |
+| `422`  | `unprocessable`       | The request is well-formed but contains invalid field values. Review the `message` field for details. |
+| `429`  | `rate_limit_exceeded` | You have exceeded your plan's request-per-minute limit. Wait for the `Retry-After` period before retrying. |
+| `500`  | `internal_error`      | An unexpected error occurred on Envoy's servers. If the issue persists, contact support. |
 
 **Example error response:**
 

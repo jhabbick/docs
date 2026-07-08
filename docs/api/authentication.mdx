@@ -1,5 +1,5 @@
 ---
-title: "Authenticate Requests to the Envoy API"
+title: "API Authentication: Keys, Scopes, and Best Practices"
 sidebarTitle: "Authentication"
 description: "Generate API keys, attach Bearer tokens to every request, understand key scopes, and follow best practices for secure key rotation."
 ---
@@ -24,7 +24,7 @@ You can create an API key directly from the Envoy dashboard:
 
 Pass your API key in the `Authorization` header as a Bearer token on every request. The header format is:
 
-```
+```http
 Authorization: Bearer YOUR_API_KEY
 ```
 
@@ -61,7 +61,7 @@ When creating a key, you assign it one of three scopes. Choose the most restrict
 | Scope   | Access Level                                                                 |
 |---------|------------------------------------------------------------------------------|
 | `read`  | Read-only access. Can call all `GET` endpoints but cannot create or modify resources. |
-| `write` | Read and write access. Can call `GET`, `POST`, `PATCH`, and `DELETE` endpoints for most resources. |
+| `write` | Read and write access. Can call `GET`, `POST`, and `DELETE` endpoints for most resources. |
 | `admin` | Full access, including user management, workspace deletion, and webhook configuration. |
 
 <Tip>
