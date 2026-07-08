@@ -1,0 +1,81 @@
+---
+title: "Workspaces: Organize Teams and Projects in Envoy"
+sidebarTitle: "Workspaces"
+description: "Create and manage Envoy workspaces to give every team, project, or environment its own scoped space with dedicated members and settings."
+---
+
+A workspace is the primary unit of organization inside Envoy. Each workspace provides a dedicated environment with its own members, integrations, and data — completely isolated from other workspaces in your organization. You can model workspaces around teams (Engineering, Marketing), around products (Mobile App, API Platform), or around deployment environments (Staging, Production). However you slice it, workspaces give you a clean boundary between contexts so that the right people always have access to exactly what they need.
+
+## When to create a workspace
+
+Create a new workspace whenever you need a distinct separation of access or context:
+
+- **Team-based** — one workspace per department so each team manages its own integrations and data.
+- **Project-based** — a short-lived workspace scoped to a specific initiative that can be archived when the project ends.
+- **Environment-based** — separate workspaces for staging and production to prevent accidental cross-environment changes.
+
+## Create a workspace
+
+<Steps>
+  <Step title="Open your organization dashboard">
+    Log in to Envoy and navigate to your organization's home page. You'll see a list of all existing workspaces.
+  </Step>
+  <Step title="Click New Workspace">
+    Select the **New Workspace** button in the top-right corner of the workspace list.
+  </Step>
+  <Step title="Enter workspace details">
+    Provide a **name** and a **slug** (the URL-safe identifier used in API calls and deep links). You can also upload an avatar to make the workspace easy to identify at a glance.
+  </Step>
+  <Step title="Set visibility">
+    Choose **Private** to restrict access to explicitly invited members, or **Public** to allow all organization members to view the workspace automatically.
+  </Step>
+  <Step title="Save and invite members">
+    Click **Create Workspace**. You'll be taken directly to the workspace settings page where you can invite your first members and assign roles.
+  </Step>
+</Steps>
+
+## Workspace settings
+
+After creating a workspace you can update any of the following settings from **Workspace → Settings**:
+
+| Setting | Description |
+|---------|-------------|
+| **Name** | The human-readable label shown throughout the Envoy UI. |
+| **Slug** | The URL-safe identifier used in API paths (e.g. `/workspaces/engineering`). Changing the slug updates all deep links. |
+| **Avatar** | A square image (PNG or JPG, min 256 × 256 px) used as the workspace icon. |
+| **Visibility** | `private` restricts access to invited members; `public` grants read access to all org members. |
+
+## Archive vs. delete a workspace
+
+Envoy gives you two ways to retire a workspace depending on how permanent you want the action to be.
+
+- **Archive** — The workspace becomes read-only. Members can still view historical data but cannot create or modify content. Archived workspaces do not count toward your plan's active workspace limit. You can restore an archived workspace at any time.
+- **Delete** — Permanently removes the workspace and all of its data, including members, integrations, and exported reports. **This action cannot be undone.** Envoy will prompt you to type the workspace slug to confirm before deletion proceeds.
+
+<Note>
+  The number of active workspaces you can create depends on your plan. Starter plans support up to **3 active workspaces**, Growth plans support up to **20**, and Enterprise plans are unlimited. Archived workspaces do not count against your limit.
+</Note>
+
+## Workspace object reference
+
+When you retrieve a workspace via the API, the response follows this structure:
+
+```json
+{
+  "id": "ws_01HXZ3K9P",
+  "name": "Engineering",
+  "slug": "engineering",
+  "visibility": "private",
+  "member_count": 12,
+  "created_at": "2024-01-15T10:30:00Z"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique, immutable identifier for the workspace. |
+| `name` | string | Display name shown in the Envoy UI. |
+| `slug` | string | URL-safe identifier used in API paths and deep links. |
+| `visibility` | string | Either `"private"` or `"public"`. |
+| `member_count` | integer | Number of members currently active in the workspace. |
+| `created_at` | string (ISO 8601) | Timestamp of when the workspace was created. |

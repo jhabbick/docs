@@ -1,0 +1,128 @@
+---
+title: "Integration FAQs: Connecting Tools to Envoy"
+sidebarTitle: "Integrations FAQ"
+description: "Learn how to connect Slack, GitHub, Jira, Salesforce, and Zapier to Envoy, manage webhooks, troubleshoot sync issues, and build custom integrations."
+---
+
+Envoy integrates with the tools your team already relies on, helping you centralize workflows and automate repetitive tasks. This page answers the most common questions about connecting third-party services, troubleshooting sync problems, and extending Envoy through webhooks and the API.
+
+<AccordionGroup>
+  <Accordion title="What integrations does Envoy support?">
+    Envoy offers native integrations with the following tools:
+
+    | Integration | What It Does |
+    |-------------|--------------|
+    | **Slack** | Send workspace notifications and activity updates to Slack channels |
+    | **GitHub** | Sync repositories and link commits or pull requests to workspace items |
+    | **Jira** | Create and track Jira issues directly from Envoy |
+    | **Salesforce** | Connect CRM records and sync data between platforms |
+    | **Zapier** | Build custom automated workflows with 5,000+ apps |
+
+    Additionally, Envoy provides a full REST API and webhook support so you can build any custom integration your team needs. Visit **Settings → Integrations** to browse all available connections.
+  </Accordion>
+
+  <Accordion title="How do I connect Slack to Envoy?">
+    To connect Slack to your Envoy workspace:
+
+    1. Go to **Settings → Integrations** in your Envoy dashboard.
+    2. Find the **Slack** card and click **Connect**.
+    3. You'll be redirected to Slack's authorization page — sign in if prompted.
+    4. Select the Slack workspace you want to connect and click **Allow**.
+    5. Back in Envoy, choose which Slack channel should receive notifications and configure your alert preferences.
+
+    Once connected, you can customize notification triggers (for example, new member joins, workspace updates, or API alerts) from the Slack integration settings page.
+  </Accordion>
+
+  <Accordion title="Can I connect multiple Slack workspaces?">
+    Each Envoy workspace supports one Slack workspace connection at a time on the Growth plan. Enterprise customers can connect multiple Slack workspaces by reaching out to their Customer Success Manager to enable this capability.
+
+    If you need to switch your Slack connection to a different workspace, go to **Settings → Integrations → Slack**, click **Disconnect**, and then reconnect with the new Slack workspace.
+  </Accordion>
+
+  <Accordion title="How do I disconnect an integration?">
+    To disconnect any integration:
+
+    1. Go to **Settings → Integrations**.
+    2. Click the integration you want to remove.
+    3. Scroll to the bottom of the integration settings and click **Disconnect**.
+    4. Confirm the action when prompted.
+
+    Disconnecting an integration stops all data syncing immediately. It does not delete any data that was previously synced. If you reconnect the same integration later, Envoy will resume syncing from that point forward.
+  </Accordion>
+
+  <Accordion title="Why is my GitHub integration not syncing?">
+    If your GitHub integration has stopped syncing, here are the most common causes and how to fix them:
+
+    - **Token expired or revoked:** GitHub OAuth tokens can be revoked if you change your GitHub password or modify app permissions. Go to **Settings → Integrations → GitHub**, disconnect, and reconnect to generate a fresh token.
+    - **Insufficient permissions:** The GitHub account used to authorize the integration must have read access to the repositories you want to sync. Check your GitHub organization's settings to confirm.
+    - **Repository visibility changed:** If a repository was made private after the integration was set up, you may need to re-authorize with an account that has access.
+    - **Webhook delivery failures:** Check **Settings → Integrations → GitHub → Webhook Logs** for delivery errors and confirm your Envoy workspace is on an active, paid plan.
+
+    If none of these resolve the issue, contact [support@envoy.com](mailto:support@envoy.com) with your workspace ID and the name of the affected repository.
+  </Accordion>
+
+  <Accordion title="Does Envoy support Zapier?">
+    Yes. Envoy has an official Zapier integration that lets you connect Envoy to over 5,000 apps without writing any code. You can use Zapier to automate tasks like:
+
+    - Creating Envoy workspace items when a new row is added in Google Sheets
+    - Sending a Slack message when an Envoy event occurs
+    - Logging Envoy activity to Airtable or Notion
+
+    To get started, visit the [Envoy page on Zapier](https://zapier.com/apps/envoy) and click **Connect**. You'll be prompted to authenticate with your Envoy API key, which you can find at **Settings → API → API Keys**.
+
+    <Tip>
+      Zapier is available on the Growth and Enterprise plans. Starter plan users can explore Zapier's free tier with limited Zaps.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="How do I set up a webhook?">
+    Webhooks let Envoy send real-time event notifications to any URL you specify. To create a webhook:
+
+    1. Go to **Settings → Integrations → Webhooks**.
+    2. Click **Add Webhook**.
+    3. Enter the destination URL (your server endpoint that will receive the POST request).
+    4. Select the event types you want to subscribe to (e.g., `workspace.updated`, `member.added`, `item.created`).
+    5. Click **Save**. Envoy will send a test ping to verify the endpoint is reachable.
+
+    Each webhook delivery includes an `X-Envoy-Signature` header you can use to verify that the request came from Envoy. See the [API documentation](https://api.envoy.com/v1/docs) for signature verification details.
+  </Accordion>
+
+  <Accordion title="Are integrations available on all plans?">
+    Integration availability varies by plan:
+
+    | Integration | Starter | Growth | Enterprise |
+    |-------------|---------|--------|------------|
+    | Slack | ✓ | ✓ | ✓ |
+    | GitHub | — | ✓ | ✓ |
+    | Jira | — | ✓ | ✓ |
+    | Salesforce | — | — | ✓ |
+    | Zapier | Limited | ✓ | ✓ |
+    | Webhooks | — | ✓ | ✓ |
+    | REST API | ✓ | ✓ | ✓ |
+
+    To unlock additional integrations, upgrade your plan from **Settings → Billing**.
+  </Accordion>
+
+  <Accordion title="Can I build a custom integration?">
+    Yes. Envoy's REST API gives you full programmatic access to your workspace data, making it straightforward to build custom integrations with any tool or internal system. The API base URL is `https://api.envoy.com/v1` and all endpoints use standard JSON over HTTPS.
+
+    To get started:
+
+    1. Generate an API key at **Settings → API → API Keys**.
+    2. Review the [API reference documentation](https://api.envoy.com/v1/docs) for available endpoints.
+    3. Use webhooks to receive real-time events from Envoy and trigger actions in your system.
+
+    Enterprise customers also have access to dedicated integration support from their Customer Success Manager.
+  </Accordion>
+
+  <Accordion title="How do I report a broken integration?">
+    If an integration is not working as expected, please gather the following information before reaching out:
+
+    - Your workspace ID (found under **Settings → General**)
+    - The name of the integration and the approximate time the issue started
+    - Any error messages you've seen in **Settings → Integrations → [Integration Name] → Logs**
+    - Steps to reproduce the problem, if possible
+
+    Send this information to [support@envoy.com](mailto:support@envoy.com) with the subject line **"Integration Issue: [Integration Name]"**. Growth and Enterprise customers can also use live chat for faster triage.
+  </Accordion>
+</AccordionGroup>

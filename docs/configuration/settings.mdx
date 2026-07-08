@@ -1,0 +1,78 @@
+---
+title: "Workspace and Organization Settings Guide"
+sidebarTitle: "Settings"
+description: "Configure your organization and workspace settings in Envoy, including branding, notifications, API keys, and plan-based feature availability."
+---
+
+Managing your settings in Envoy gives you full control over how your organization and individual workspaces are configured. From branding and localization to API key management and notification preferences, the Settings area is your central hub for tailoring Envoy to your team's needs.
+
+## Organization Settings
+
+Organization-level settings apply across all workspaces under your account. To access them, navigate to **Settings → Organization** in the top-level navigation.
+
+| Setting | Description |
+|---|---|
+| **Name** | The display name for your organization, shown across the app and in emails. |
+| **Logo** | Upload a PNG or SVG (recommended: 200×200 px) to brand your Envoy experience. |
+| **Slug** | A unique URL-safe identifier (e.g., `acme-corp`) used in your Envoy subdomain. |
+| **Timezone** | Sets the default timezone for scheduling, reports, and audit log timestamps. |
+| **Default Language** | Controls the language used in the Envoy interface and outbound notifications. |
+
+<Note>
+  Changing your organization slug will update your Envoy subdomain immediately. Share the new URL with your team to avoid disruption.
+</Note>
+
+## Workspace Settings
+
+Each workspace can be independently configured. Navigate to **Settings → Workspace** while inside the workspace you want to update.
+
+| Setting | Description |
+|---|---|
+| **Name** | A human-readable label for the workspace, visible to all members. |
+| **Slug** | A URL-safe identifier unique within your organization. |
+| **Visibility** | Set to **Private** (invite-only) or **Internal** (discoverable by org members). |
+| **Member Defaults** | Define the default role assigned to new members joining this workspace. |
+
+You can manage multiple workspaces from the organization dashboard by switching between them using the workspace picker in the sidebar.
+
+## Notification Defaults
+
+Organization administrators can configure default notification behaviors that apply to all members unless overridden at the individual level. Go to **Settings → Notifications** to manage these preferences.
+
+- **Email Digest Frequency** — Choose daily, weekly, or off.
+- **Activity Alerts** — Enable or disable notifications for workspace events such as new integrations, member joins, and API errors.
+- **Billing Alerts** — Automatically notify billing admins when invoices are generated or payment methods are expiring.
+
+<Info>
+  Individual members can override organization notification defaults from their personal **Profile → Notifications** settings.
+</Info>
+
+## API Settings
+
+Envoy provides a REST API for automating workspace operations and integrating with external systems. API credentials are managed under **Settings → API**.
+
+- **API Keys** — Generate named API keys scoped to your organization. Each key can be labeled (e.g., `ci-pipeline`, `data-export`) for clarity.
+- **Key Rotation** — Revoke and reissue keys at any time. Revoked keys are invalidated immediately.
+- **Rate Limit Display** — Your current plan's rate limits are displayed in the API settings panel, alongside your real-time usage for the current billing window.
+
+<Tip>
+  You can use the Envoy REST API to programmatically update settings such as workspace names, member defaults, and notification preferences — ideal for infrastructure-as-code workflows or onboarding automation scripts.
+</Tip>
+
+## Settings Available by Plan
+
+Not all settings are available on every plan. The table below summarizes which configuration options are accessible based on your current subscription.
+
+| Setting | Starter | Growth | Enterprise |
+|---|---|---|---|
+| Organization name & logo | ✅ | ✅ | ✅ |
+| Custom org slug | ✅ | ✅ | ✅ |
+| Timezone & language | ✅ | ✅ | ✅ |
+| Multiple workspaces | ❌ | ✅ | ✅ |
+| Workspace visibility controls | ❌ | ✅ | ✅ |
+| Notification defaults | ✅ | ✅ | ✅ |
+| API key management | ✅ | ✅ | ✅ |
+| Higher API rate limits | ❌ | ✅ | ✅ |
+| Audit log access | ❌ | ✅ | ✅ |
+| SSO & advanced security | ❌ | ❌ | ✅ |
+| Custom branding & domain | ❌ | ❌ | ✅ |

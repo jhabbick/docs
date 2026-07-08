@@ -1,0 +1,89 @@
+---
+title: "Export Your Envoy Data: Reports and Backups"
+sidebarTitle: "Data Export"
+description: "Export workspace data as CSV, JSON, or XLSX for reporting, auditing, backups, and GDPR data portability requests — on demand or on a schedule."
+---
+
+Envoy gives you full access to the data your workspace generates. Whether you need a one-off member list for an audit, a rolling activity log for your SIEM, or a scheduled backup for compliance, the export tools in your dashboard and API have you covered.
+
+## Supported export formats
+
+| Format | Best for |
+|--------|----------|
+| **CSV** | Spreadsheet analysis, importing into other tools, lightweight data pipelines |
+| **JSON** | Developer workflows, API integrations, structured data processing |
+| **XLSX** | Formatted Excel reports for stakeholders and finance teams |
+
+## What you can export
+
+Envoy lets you export the following data sets from your workspace:
+
+- **Members** — Name, email, role, join date, and last active timestamp for every current and former member.
+- **Activity logs** — A timestamped record of every action taken in the workspace: logins, record changes, integration events, and admin actions.
+- **Integration logs** — Connection history, OAuth events, sync errors, and payload summaries for each connected integration.
+- **Reports** — Aggregated workspace metrics including member growth, activity trends, and integration usage over a selected date range.
+
+## Export data from the dashboard
+
+<Steps>
+  <Step title="Go to Settings → Data Export">
+    Click **Settings** in the left sidebar, then select **Data Export**. You'll see a list of available data sets alongside their most recent export date.
+  </Step>
+  <Step title="Choose a data set">
+    Click **Export** next to the data set you want — for example, **Activity Logs**. A configuration panel opens on the right.
+  </Step>
+  <Step title="Set the date range and format">
+    Select a date range using the calendar picker (or choose a preset like **Last 30 days** or **Last 90 days**). Then pick your preferred format: **CSV**, **JSON**, or **XLSX**.
+  </Step>
+  <Step title="Start the export">
+    Click **Generate Export**. Envoy queues the export job. For large data sets, this may take a few minutes. You'll receive an in-app notification and an email with a download link when the file is ready.
+  </Step>
+  <Step title="Download the file">
+    Click the download link in the notification or email, or return to **Settings → Data Export** and click **Download** next to the completed export. Download links expire after 48 hours.
+  </Step>
+</Steps>
+
+## Scheduled exports (Enterprise)
+
+Enterprise workspaces can configure exports to run automatically on a recurring schedule, delivering files directly to a destination of your choice.
+
+To set up a scheduled export:
+
+1. Go to **Settings → Data Export → Scheduled Exports**.
+2. Click **New Schedule**.
+3. Select the data set, format, and frequency (**Daily**, **Weekly**, or **Monthly**).
+4. Choose a delivery destination: **Email**, **Amazon S3 bucket**, or **SFTP server**.
+5. Click **Save Schedule**.
+
+Scheduled exports run at 02:00 UTC on their configured cadence. You can pause, edit, or delete a schedule at any time without losing previous export history.
+
+## Export data via API
+
+For programmatic access, use the `/v1/reports` endpoint to pull data directly into your own pipelines:
+
+```bash
+curl https://api.envoy.com/v1/reports?format=csv&range=last_30_days \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -o report.csv
+```
+
+You can also combine parameters for more granular pulls:
+
+```bash
+# Export member data as JSON for a custom date range
+curl "https://api.envoy.com/v1/reports?dataset=members&format=json&start=2024-01-01&end=2024-06-30" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -o members.json
+```
+
+The API returns the file as a direct download stream. For large exports, Envoy may respond with a `202 Accepted` and a job ID — poll `GET /v1/reports/jobs/{job_id}` to check status and retrieve the download URL when the job completes.
+
+<Note>
+  Envoy retains activity logs and integration logs for **12 months** on the Standard plan and **36 months** on the Enterprise plan. Export data you need to keep longer before it ages out of the retention window. Billing records are retained for 7 years to meet standard accounting requirements regardless of plan.
+</Note>
+
+## GDPR and data portability
+
+Envoy supports your obligations under the GDPR and similar data portability regulations. If a workspace member submits a Subject Access Request (SAR), you can export all personal data associated with their account — including their profile, activity history, and any records they created — using the **Members** export filtered by that individual's email address.
+
+For formal deletion requests, contact [privacy@envoy.com](mailto:privacy@envoy.com) with the member's email address and workspace ID. Envoy processes verified deletion requests within 30 days in accordance with GDPR Article 17.

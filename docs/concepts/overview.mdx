@@ -1,0 +1,45 @@
+---
+title: "Core Concepts: How Envoy Organizes Your Work"
+sidebarTitle: "Overview"
+description: "Learn the key building blocks of Envoy — organizations, workspaces, members, and integrations — and how they fit together."
+---
+
+Envoy structures your work around a hierarchy of objects that mirror how modern teams actually operate. At the top sits your **Organization**, which acts as the account-level container for everything your company does in Envoy. Inside an organization you create **Workspaces** for individual teams or projects, invite **Members** and assign them **Roles**, and connect **Integrations** that pull in the tools your teams already use. Understanding how these objects relate to one another is the fastest path to getting the most out of Envoy.
+
+## Object hierarchy
+
+Here is how Envoy's core objects nest inside one another:
+
+- **Organization** — the top-level account that owns all billing, settings, and data
+  - **Workspaces** — scoped environments for a team, project, or product area
+    - **Members** — users invited into a workspace with a specific role
+      - **Integrations** — third-party connections available within a workspace
+
+## Explore the core concepts
+
+<CardGroup cols={2}>
+  <Card title="Workspaces" icon="layer-group" href="/docs/concepts/workspaces">
+    Learn how to create and manage workspaces to keep teams and projects organized.
+  </Card>
+  <Card title="Users & Roles" icon="users" href="/docs/concepts/users-and-roles">
+    Understand Admin, Member, and Viewer roles and how permissions are enforced.
+  </Card>
+  <Card title="Integrations" icon="plug" href="/docs/concepts/integrations">
+    Connect Slack, GitHub, Jira, Salesforce, and more to your Envoy workspaces.
+  </Card>
+  <Card title="API Overview" icon="code" href="/docs/api/overview">
+    Use the Envoy REST API and webhooks to build custom workflows and automations.
+  </Card>
+</CardGroup>
+
+## Glossary
+
+| Term | Definition |
+|------|------------|
+| **Organization** | The top-level account container that holds all workspaces, members, billing, and settings. |
+| **Workspace** | A scoped environment inside an organization used to separate teams, projects, or environments. |
+| **Member** | A user who has been invited to an organization or workspace and assigned a role. |
+| **Role** | A named set of permissions (Admin, Member, or Viewer) that controls what a member can see and do. |
+| **Integration** | A connection between Envoy and a third-party tool such as Slack, GitHub, or Salesforce. |
+| **API Key** | A secret credential used to authenticate programmatic requests to the Envoy REST API. |
+| **Webhook** | An HTTP callback that Envoy sends to a URL you specify when a specified event occurs. |

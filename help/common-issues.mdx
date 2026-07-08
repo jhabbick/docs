@@ -1,0 +1,120 @@
+---
+title: "Common Issues and How to Fix Them in Envoy"
+sidebarTitle: "Common Issues"
+description: "Step-by-step troubleshooting for the most frequent Envoy problems including login failures, notification issues, API errors, and lost 2FA access."
+---
+
+Even the best software has the occasional hiccup. This page walks you through solutions to the most common issues Envoy customers encounter, so you can get back to work as quickly as possible. If a step-by-step fix doesn't resolve your problem, our support team is always available at [support@envoy.com](mailto:support@envoy.com).
+
+<AccordionGroup>
+  <Accordion title="I can't log in to my account">
+    If you're unable to sign in to Envoy, work through these steps in order:
+
+    1. **Check your credentials.** Make sure you're using the correct email address and that Caps Lock is off.
+    2. **Reset your password.** Go to the login page, click **Forgot password?**, and follow the instructions. Reset links expire after 60 minutes.
+    3. **Check for a browser issue.** Try logging in using an incognito/private window or a different browser to rule out a cached session or extension conflict.
+    4. **Clear cookies and cache.** Stale session cookies can prevent login. Clear your browser's cookies for `envoy.com` and try again.
+    5. **Check your SSO provider.** If your workspace uses Single Sign-On, the issue may be with your identity provider (IdP). Contact your IT administrator to confirm your account is active and correctly provisioned.
+    6. **Check the status page.** Visit [status.envoy.com](https://status.envoy.com) to confirm there are no ongoing authentication incidents.
+
+    If none of the above resolves the issue, email [support@envoy.com](mailto:support@envoy.com) with the email address on your account.
+  </Accordion>
+
+  <Accordion title="I'm not receiving email notifications">
+    If Envoy emails (notifications, invites, password resets) aren't arriving in your inbox:
+
+    1. **Check your spam or junk folder.** Email filters sometimes misclassify automated messages. If you find Envoy emails there, mark them as "Not Spam" to train your filter.
+    2. **Verify your notification settings.** Go to **Account Settings → Notifications** and confirm the notification types you want are enabled.
+    3. **Confirm your email address is correct.** Go to **Account Settings → Profile** and verify the email address on file matches what you're checking.
+    4. **Check with your IT team.** Corporate email systems sometimes block or quarantine external senders. Ask your IT or email administrator to whitelist `@envoy.com` and `@mail.envoy.com`.
+    5. **Add Envoy to your contacts.** Adding `notifications@envoy.com` to your address book can help ensure future delivery.
+
+    <Tip>
+      If you manage a workspace, you can also check delivery logs by going to **Settings → Notifications → Delivery Log** to see the status of recent outgoing emails.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="My integration stopped working">
+    Integrations can stop syncing for several reasons. Here's how to diagnose the problem:
+
+    1. **Check the integration status.** Go to **Settings → Integrations**, find the affected integration, and look for an error badge or status indicator.
+    2. **Review the integration logs.** Click the integration and open the **Logs** tab to see recent delivery attempts and any error messages.
+    3. **Re-authorize the connection.** OAuth tokens can expire or be revoked when you change passwords or modify permissions in the connected service. Disconnect and reconnect the integration to generate a fresh token.
+    4. **Check for permission changes.** If someone changed access permissions in the third-party tool (e.g., removed the Envoy app from a GitHub organization), you'll need to re-grant those permissions.
+    5. **Check the status page.** Visit [status.envoy.com](https://status.envoy.com) to see if the affected third-party service has a known incident.
+
+    If the issue persists, contact [support@envoy.com](mailto:support@envoy.com) with your workspace ID and the integration name.
+  </Accordion>
+
+  <Accordion title="I'm getting 401 Unauthorized errors from the API">
+    A `401 Unauthorized` response means Envoy could not authenticate your request. Here's what to check:
+
+    1. **Confirm your API key is correct.** Copy your API key directly from **Settings → API → API Keys** to avoid typos or invisible whitespace characters.
+    2. **Check the Authorization header format.** Envoy expects the key in the `Authorization` header using Bearer token format:
+       ```
+       Authorization: Bearer YOUR_API_KEY
+       ```
+    3. **Check if the key has been revoked.** If the key doesn't appear in **Settings → API → API Keys**, it may have been deleted. Generate a new one.
+    4. **Verify the key has the right scopes.** Some endpoints require specific permission scopes. Check the key's scope settings and compare them against the endpoint's requirements in the [API documentation](https://api.envoy.com/v1/docs).
+    5. **Check your workspace status.** If your workspace subscription has lapsed, API access may be restricted.
+  </Accordion>
+
+  <Accordion title="I've been rate limited (429 error)">
+    A `429 Too Many Requests` response means your application has exceeded Envoy's rate limits. Rate limits help ensure platform stability for all customers.
+
+    To resolve this:
+
+    1. **Back off and retry.** Check the `Retry-After` header in the response — it tells you how many seconds to wait before your next request.
+    2. **Implement exponential backoff.** Rather than retrying immediately, add progressively longer delays between retries (e.g., 1s, 2s, 4s, 8s).
+    3. **Reduce request frequency.** Audit your integration for unnecessary or redundant API calls. Cache responses where appropriate and batch requests when the API supports it.
+    4. **Check current limits.** Rate limits are documented in the [API reference](https://api.envoy.com/v1/docs) and vary by plan. The `X-RateLimit-Limit` and `X-RateLimit-Remaining` headers are included in every API response.
+
+    Enterprise customers can contact their Customer Success Manager to discuss higher rate limit thresholds.
+  </Accordion>
+
+  <Accordion title="A workspace member can't see content they should have access to">
+    Access issues are almost always related to role assignments or workspace membership. Here's how to diagnose them:
+
+    1. **Check the member's role.** Go to **Settings → Members**, find the affected user, and verify their role. Envoy uses three roles:
+       - **Admin** – Full access to all workspace settings and content
+       - **Member** – Can view and edit content based on project-level permissions
+       - **Viewer** – Read-only access
+    2. **Check project-level permissions.** Even if a user is a Member, individual projects or resources may have additional access restrictions. Review the specific item's permission settings.
+    3. **Confirm workspace membership.** Make sure the user is a member of the correct workspace. If you have multiple workspaces, they may be looking in the wrong one.
+    4. **Ask the user to refresh.** Permission changes propagate in real time, but a hard refresh (`Ctrl+Shift+R` / `Cmd+Shift+R`) or signing out and back in can clear stale session data.
+
+    If the issue persists after reviewing roles and permissions, contact [support@envoy.com](mailto:support@envoy.com) with the affected user's email and a description of what they can't see.
+  </Accordion>
+
+  <Accordion title="My webhook isn't receiving events">
+    If your webhook endpoint isn't receiving events from Envoy, work through these steps:
+
+    1. **Verify the endpoint URL.** Go to **Settings → Integrations → Webhooks**, open the webhook, and confirm the destination URL is correct and publicly reachable.
+    2. **Check the delivery logs.** Envoy logs every webhook attempt. Open the webhook settings and click **View Delivery Log** to see if deliveries are succeeding or failing, and review the response codes returned by your server.
+    3. **Confirm your server is returning 2xx responses.** Envoy considers a delivery successful only when your endpoint returns an HTTP `2xx` status code. If your server returns any other code, Envoy will mark the delivery as failed.
+    4. **Check for firewall or IP restrictions.** If your endpoint is behind a firewall, ensure it allows inbound requests from Envoy's IP addresses (listed in the [API documentation](https://api.envoy.com/v1/docs)).
+    5. **Verify event subscriptions.** Confirm you've subscribed to the correct event types for your use case. An event won't be delivered if you haven't subscribed to it.
+    6. **Check the status page.** Visit [status.envoy.com](https://status.envoy.com) to confirm there are no active webhook delivery incidents.
+  </Accordion>
+
+  <Accordion title="I lost access to my 2FA device">
+    If you've lost access to your two-factor authentication (2FA) device and can no longer log in, here's what to do:
+
+    1. **Use a backup code.** When you set up 2FA, Envoy provided a set of single-use backup codes. If you saved them, enter one on the 2FA verification screen to regain access.
+    2. **Contact support for account recovery.** If you don't have backup codes, email [support@envoy.com](mailto:support@envoy.com) from the email address associated with your account. Include:
+       - Your full name
+       - Your account email address
+       - Your workspace name or ID
+       - A description of the situation
+
+    Our support team will verify your identity using secondary authentication factors and, if successful, temporarily disable 2FA on your account so you can regain access and re-enroll a new device.
+
+    <Warning>
+      For security reasons, Envoy support cannot bypass 2FA without completing the identity verification process. Please allow up to one business day for account recovery requests.
+    </Warning>
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+  If your issue involves API error codes, see the [Error Codes reference](/help/error-codes) for a complete list of Envoy API error codes, what they mean, and how to resolve each one.
+</Info>

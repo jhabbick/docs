@@ -1,0 +1,112 @@
+---
+title: "Billing, Plans, and Subscription Management"
+sidebarTitle: "Billing"
+description: "Understand Envoy's pricing plans, manage your subscription, update payment methods, download invoices, and learn about cancellation and data retention."
+---
+
+Envoy offers flexible pricing plans designed to scale with your team, from a free Starter tier for individuals and small teams to a fully customizable Enterprise plan for large organizations. All billing settings are accessible under **Settings → Billing**, where you can view your current plan, manage payment methods, and download past invoices.
+
+## Plans Comparison
+
+The table below summarizes what's included in each Envoy plan.
+
+| Feature | Starter | Growth | Enterprise |
+|---|---|---|---|
+| **Price** | Free | $49/mo per workspace | Custom pricing |
+| **Workspaces** | 1 | Unlimited | Unlimited |
+| **Members** | Up to 5 | Unlimited | Unlimited |
+| **API Rate Limit** | 100 req/min | 1,000 req/min | Custom (10,000+ req/min) |
+| **Integrations** | 3 | Unlimited | Unlimited |
+| **SSO (SAML/OIDC)** | ❌ | ❌ | ✅ |
+| **Audit Logs** | ❌ | ✅ | ✅ |
+| **Support** | Community | Email (48h SLA) | Dedicated CSM + SLA |
+
+<Note>
+  Enterprise plans include custom SLA terms, a dedicated Customer Success Manager, and negotiated rate limits. Contact our sales team at sales@envoy.com to discuss your requirements.
+</Note>
+
+## Upgrading Your Plan
+
+You can upgrade your plan at any time from **Settings → Billing**. Upgrades take effect immediately, and you will be charged a prorated amount for the remainder of your current billing cycle.
+
+<Steps>
+  <Step title="Go to Billing Settings">
+    Navigate to **Settings → Billing** in your organization dashboard. Your current plan and renewal date are shown at the top of the page.
+  </Step>
+  <Step title="Click 'Upgrade Plan'">
+    Select **Upgrade Plan** to open the plan selection screen. Review the features and pricing for each available tier.
+  </Step>
+  <Step title="Select your new plan">
+    Choose **Growth** or **Enterprise**. For Enterprise, you will be directed to contact sales to configure a custom contract. For Growth, continue to the checkout step.
+  </Step>
+  <Step title="Confirm billing details">
+    Review the prorated charge for the current period and confirm your payment method. Click **Confirm Upgrade** to activate the new plan immediately.
+  </Step>
+  <Step title="Verify your new features">
+    Once upgraded, your new plan's features are available instantly. Check **Settings → Security** or **Settings → Integrations** to begin using newly unlocked capabilities.
+  </Step>
+</Steps>
+
+## Payment Methods
+
+<Tabs>
+  <Tab title="Credit Card">
+    Starter and Growth plan customers pay by credit card. Envoy accepts Visa, Mastercard, and American Express. To add or update your card:
+
+    1. Go to **Settings → Billing → Payment Methods**.
+    2. Click **Add Payment Method** and enter your card details.
+    3. Set the new card as the default if you want future charges applied to it.
+    4. Remove outdated cards using the **Remove** option next to each entry.
+
+    All card data is processed and stored securely by our payment provider. Envoy does not store raw card numbers on our servers.
+  </Tab>
+  <Tab title="Invoice (Enterprise)">
+    Enterprise customers can pay by invoice instead of credit card. Invoices are issued at the start of each billing period and are payable within 30 days via bank transfer.
+
+    To set up invoice billing, work with your Envoy account manager during contract setup. Once configured, invoices will be emailed to your designated billing contact and are also available to download from **Settings → Billing → Invoices**.
+  </Tab>
+</Tabs>
+
+## Billing Cycle
+
+Envoy supports both **monthly** and **annual** billing cycles.
+
+- **Monthly billing** — You are charged at the start of each calendar month for the upcoming period.
+- **Annual billing** — You are charged once per year upfront. Annual billing includes a **20% discount** compared to the equivalent monthly rate.
+
+You can switch between monthly and annual billing at any time from **Settings → Billing → Billing Cycle**. Switching to annual billing takes effect at your next renewal date. Switching from annual to monthly takes effect at the end of your current annual period.
+
+<Tip>
+  If your team's usage is consistent throughout the year, switching to annual billing is the most cost-effective option. A Growth workspace at $49/mo costs $588/year monthly — or $470.40/year with the annual discount.
+</Tip>
+
+## Downloading Invoices
+
+All past invoices are available in **Settings → Billing → Invoices**. Each invoice lists the billing period, line items, applicable taxes, and total amount charged.
+
+To download an invoice:
+1. Go to **Settings → Billing → Invoices**.
+2. Find the invoice for the period you need.
+3. Click **Download PDF** to save a copy to your device.
+
+Invoices are retained in your account indefinitely, even after plan changes or cancellation (within the data retention window).
+
+## Cancellation and Data Retention
+
+You can cancel your Envoy subscription at any time from **Settings → Billing → Subscription**. Click **Cancel Subscription** and follow the confirmation prompts. Your plan will remain active until the end of the current billing period, after which your account will revert to the Starter (free) tier.
+
+If you choose to close your account entirely rather than downgrade:
+
+<Warning>
+  Permanently deleting your Envoy organization will schedule all associated data — including workspaces, integrations, API keys, audit logs, and member records — for deletion. This data will be **permanently and irrecoverably deleted after 30 days**. If you need to export your data before deletion, download it from **Settings → Data Export** before confirming account closure.
+</Warning>
+
+<Accordion title="What happens to my data after cancellation?">
+  When you cancel and your plan period ends, your account enters a **read-only grace period** for 30 days. During this time, you can log in, export data, and download invoices, but you cannot make changes to settings or invite new members.
+
+  After 30 days, all data associated with your organization is permanently deleted from Envoy's systems in accordance with our data retention policy and applicable privacy regulations.
+</Accordion>
+
+<Note>
+  Enterprise customers are subject to the data retention terms specified in their individual contracts, which may differ from the standard 30-day policy. Review your contract or contact your account manager for details.
+</Note>

@@ -1,0 +1,41 @@
+---
+title: "Get Started with Envoy in 5 Minutes"
+sidebarTitle: "Quickstart"
+description: "Create your Envoy account, set up a workspace, invite a teammate, and make your first API call — all in under 5 minutes."
+---
+
+This guide walks you through the fastest path from zero to a working Envoy setup. By the end, you'll have a live workspace, at least one teammate onboard, and a successful API call under your belt — giving you a solid foundation to build on.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- A **free Envoy account** — sign up at [envoy.com/signup](https://envoy.com/signup) if you haven't already
+- Your **API key** — available in **Settings → API Keys** once your account is created
+
+<Steps>
+  <Step title="Create your account">
+    Go to [envoy.com/signup](https://envoy.com/signup) and register using your work email address or an SSO provider such as Google or Okta. After signing up, check your inbox for a verification email and click the confirmation link to activate your account.
+  </Step>
+  <Step title="Create your first workspace">
+    Once you're logged in, click **New Workspace** from the dashboard. Give your workspace a name that reflects its purpose — for example, your team name or project — then choose a visibility setting (private or organization-wide) and click **Create Workspace**.
+  </Step>
+  <Step title="Invite a team member">
+    Open your new workspace and navigate to **Members → Invite**. Enter your teammate's email address, select a role (Owner, Admin, or Member), and click **Send Invite**. They'll receive an email prompting them to join.
+  </Step>
+  <Step title="Make your first API call">
+    With your API key in hand, run the following command to list your workspaces and confirm everything is working:
+
+    ```bash
+    curl https://api.envoy.com/v1/workspaces \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json"
+    ```
+
+    Replace `YOUR_API_KEY` with the key from **Settings → API Keys**. A successful response returns a JSON array of your workspaces.
+  </Step>
+</Steps>
+
+<Tip>
+  Ready to go further? Explore the [API Reference](/docs/api/overview) to automate workspace management, set up [Integrations](/docs/concepts/integrations) to connect your existing tools, or review [Role-Based Access Control](/docs/concepts/users-and-roles) to fine-tune who can do what in your organization.
+</Tip>

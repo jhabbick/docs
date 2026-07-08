@@ -1,0 +1,84 @@
+---
+title: "Invite, Manage, and Remove Team Members"
+sidebarTitle: "Managing Users"
+description: "Learn how to invite teammates, assign roles, update permissions, and safely remove members from your Envoy workspace."
+---
+
+Your Envoy workspace grows as your team does. You can invite new members one at a time, bulk-import a list via CSV, and adjust roles as responsibilities change — all from the **Members** section of your settings. This guide covers every stage of the member lifecycle.
+
+## Invite a new member
+
+<Steps>
+  <Step title="Go to Settings → Members">
+    Click **Settings** in the left sidebar of your Envoy dashboard, then select **Members**. You'll see a table of everyone currently in your workspace alongside their role and join date.
+  </Step>
+  <Step title="Enter the member's email address">
+    Click **Invite Member** in the top-right corner. In the dialog that appears, type the email address of the person you want to invite. Envoy accepts any valid email — the recipient doesn't need an existing Envoy account.
+  </Step>
+  <Step title="Select a role">
+    Choose a role from the dropdown:
+    - **Admin** — full access to settings, billing, integrations, and all workspace data.
+    - **Member** — can use the workspace and view most data, but cannot access billing or manage other users.
+    - **Viewer** — read-only access to workspace content; cannot create or modify records.
+  </Step>
+  <Step title="Send the invite">
+    Click **Send Invite**. Envoy emails the recipient a secure invitation link valid for 72 hours. You can resend or revoke the invite from the **Pending Invitations** tab at any time.
+  </Step>
+</Steps>
+
+## Bulk invite via CSV
+
+To invite many members at once, prepare a CSV file with exactly two columns — `email` and `role` — and no header row:
+
+```csv
+alice@example.com,member
+bob@example.com,viewer
+carol@example.com,admin
+```
+
+Then upload the file:
+
+1. Go to **Settings → Members**.
+2. Click **Bulk Invite**.
+3. Upload your CSV file.
+4. Review the parsed list for any errors, then click **Send All Invites**.
+
+Envoy validates each row before sending. Rows with unrecognized roles or malformed email addresses are flagged for correction without blocking the rest of the import.
+
+## Change a member's role
+
+To update a member's role after they've joined:
+
+1. Go to **Settings → Members**.
+2. Find the member in the table and click the **⋯** menu on their row.
+3. Select **Change Role** and pick the new role from the dropdown.
+4. Confirm the change.
+
+The new permissions take effect immediately — the member does not need to sign out and back in.
+
+## Remove a member
+
+To remove someone from your workspace:
+
+1. Go to **Settings → Members**.
+2. Find the member and click the **⋯** menu on their row.
+3. Select **Remove Member** and confirm.
+
+Removing a member immediately revokes their access. Their historical activity logs, comments, and records remain in the workspace for audit and continuity purposes — no data is deleted. If you need to transfer ownership of specific records before removing someone, do so before completing the removal.
+
+<Warning>
+  Do not remove the last Admin in your workspace. Doing so locks you out of billing, integrations, and user management settings. Always promote another member to Admin before removing yourself or the current sole Admin.
+</Warning>
+
+## Invite a user via API
+
+You can also invite members programmatically using the Envoy REST API. This is useful for automating onboarding workflows or integrating invitations into your internal tooling.
+
+```bash
+curl -X POST https://api.envoy.com/v1/users \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "alice@example.com", "role": "member", "workspace_id": "ws_01HXZ3K9P"}'
+```
+
+A successful response returns a `201 Created` status with the new user object, including their `user_id` and the status `pending` until they accept the invitation.

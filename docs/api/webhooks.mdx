@@ -1,0 +1,152 @@
+---
+title: "Webhooks: Receive Real-Time Envoy Events"
+sidebarTitle: "Webhooks"
+description: "Register webhook endpoints to receive real-time event payloads from Envoy, verify signatures, and handle retries for reliable event delivery."
+---
+
+Webhooks let your application react to activity in Envoy without polling the API. When a relevant event occurs — a user being invited, a workspace being created, or a report becoming ready — Envoy sends an HTTP `POST` request to a URL you register, containing a structured JSON payload describing the event. This makes it straightforward to trigger downstream workflows, sync external systems, or send notifications in real time.
+
+## How Webhooks Work
+
+When an event is triggered inside Envoy, the platform:
+
+1. Identifies all webhook registrations that are subscribed to that event type.
+2. Constructs a JSON payload describing the event.
+3. Signs the payload with your webhook secret using HMAC-SHA256.
+4. `POST`s the payload to your registered URL with a `Content-Type: application/json` header.
+
+Your endpoint must respond with any `2xx` status code within **5 seconds** to be considered a successful delivery. If it does not, Envoy retries the request (see [Retry Behavior](#retry-behavior)).
+
+<Note>
+  Webhook deliveries are not guaranteed to arrive in strict chronological order. Use the `event.created_at` timestamp in each payload — not delivery order — to sequence events in your application logic.
+</Note>
+
+## Registering a Webhook
+
+Use `POST /webhooks` to register a new endpoint. You provide the destination URL and the list of event types you want to subscribe to.
+
+```bash
+curl -X POST https://api.envoy.com/v1/webhooks \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://yourapp.com/webhooks/envoy", "events": ["member.invited", "workspace.created"]}'
+```
+
+**Example response:**
+
+```json
+{
+  "data": {
+    "id": "wh_03BXY7R5T",
+    "url": "https://yourapp.com/webhooks/envoy",
+    "events": ["member.invited", "workspace.created"],
+    "secret": "whsec_a1b2c3d4e5f6...",
+    "created_at": "2024-06-03T10:00:00Z"
+  }
+}
+```
+
+<Warning>
+  The `secret` field is returned **only once** at registration time. Copy it immediately and store it in a secure secrets manager. You will use it to verify incoming webhook signatures.
+</Warning>
+
+## Available Events
+
+Subscribe to any combination of the following event types when registering a webhook:
+
+| Event Type                  | Triggered When                                              |
+|-----------------------------|-------------------------------------------------------------|
+| `member.invited`            | A user is invited to a workspace.                           |
+| `member.removed`            | A user is removed from a workspace.                         |
+| `workspace.created`         | A new workspace is created.                                 |
+| `workspace.deleted`         | A workspace is deleted.                                     |
+| `integration.connected`     | An integration is connected to a workspace.                 |
+| `integration.disconnected`  | An integration is disconnected from a workspace.            |
+| `report.ready`              | A requested report has finished generating and is available for download. |
+
+## Webhook Payload Structure
+
+Every webhook delivery shares the same envelope structure regardless of event type.
+
+```json
+{
+  "id": "evt_55ZZQ8W2N",
+  "type": "member.invited",
+  "created_at": "2024-06-03T10:15:00Z",
+  "workspace_id": "ws_01HXZ3K9P",
+  "data": {
+    "user_id": "usr_09ABZ1M2Q",
+    "email": "alex@example.com",
+    "role": "member",
+    "invited_by": "usr_00AAX0L1P"
+  }
+}
+```
+
+| Field          | Type   | Description                                                         |
+|----------------|--------|---------------------------------------------------------------------|
+| `id`           | string | Unique identifier for this event delivery, prefixed with `evt_`.   |
+| `type`         | string | The event type, matching one of the values in the table above.      |
+| `created_at`   | string | ISO 8601 timestamp of when the event was generated.                 |
+| `workspace_id` | string | The workspace in which the event occurred.                          |
+| `data`         | object | Event-specific payload. Shape varies by event type.                 |
+
+## Signature Verification
+
+Every webhook delivery includes an `Envoy-Signature` header containing an HMAC-SHA256 hex digest of the raw request body, signed with your webhook secret. **Always verify this signature** before processing a payload to ensure the request genuinely came from Envoy and was not tampered with in transit.
+
+The verification algorithm:
+
+1. Read the raw request body as bytes (do not parse JSON first).
+2. Compute `HMAC-SHA256(secret, body)` using your webhook secret.
+3. Compare the result to the value in the `Envoy-Signature` header using a constant-time comparison function.
+4. Reject the request if they do not match.
+
+```python
+import hmac
+import hashlib
+
+def verify_signature(payload_body: bytes, secret: str, signature_header: str) -> bool:
+    expected = hmac.new(secret.encode(), payload_body, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected, signature_header)
+```
+
+<Warning>
+  Always use a **constant-time comparison** function (such as `hmac.compare_digest` in Python) rather than the `==` operator. Standard equality checks are vulnerable to timing attacks that can allow an attacker to forge a valid signature.
+</Warning>
+
+## Retry Behavior
+
+If your endpoint does not return a `2xx` response within 5 seconds, Envoy automatically retries the delivery up to **3 times** using exponential backoff:
+
+| Attempt | Delay after previous attempt |
+|---------|------------------------------|
+| 1st retry | 30 seconds                 |
+| 2nd retry | 5 minutes                  |
+| 3rd retry | 30 minutes                 |
+
+After the third failed retry, the delivery is marked as failed and no further attempts are made. You can review failed deliveries in **Settings → Webhooks** and manually replay any event from there.
+
+<Note>
+  Because retries re-send the same event `id`, your endpoint should be **idempotent** — processing the same event multiple times should produce the same result as processing it once. Store the `id` field and skip processing for any event ID you have already handled.
+</Note>
+
+## Managing Webhooks
+
+Use the following endpoints to list and remove webhook registrations:
+
+**List all registered webhooks:**
+
+```bash
+curl https://api.envoy.com/v1/webhooks \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+**Remove a webhook:**
+
+```bash
+curl -X DELETE https://api.envoy.com/v1/webhooks/wh_03BXY7R5T \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+Deleting a webhook immediately stops all future deliveries to that URL. In-flight deliveries that have already been dispatched may still arrive.

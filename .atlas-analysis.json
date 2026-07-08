@@ -1,30 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
+  "projectType": "saas",
+  "projectName": "Envoy",
+  "projectDescription": "A SaaS platform with technical documentation, help center, marketing comparisons, and a blog for end-users and evaluators.",
   "theme": "maple",
-  "name": "Envoy",
-  "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
-  },
-  "favicon": "/favicon.svg",
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:support@envoy.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Sign In",
-      "href": "https://app.envoy.com"
-    }
-  },
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
   "navigation": {
     "tabs": [
       {
@@ -119,10 +100,23 @@
       }
     ]
   },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/envoy",
-      "linkedin": "https://linkedin.com/company/envoy"
-    }
-  }
+  "keyFeatures": [
+    "Workspace management for teams",
+    "Role-based access control",
+    "Third-party integrations",
+    "REST API with webhook support",
+    "Data export and reporting",
+    "Flexible billing and subscription management",
+    "Enterprise security and SSO"
+  ],
+  "publicApiSurface": [
+    "GET /api/v1/workspaces",
+    "POST /api/v1/workspaces",
+    "GET /api/v1/users",
+    "POST /api/v1/users",
+    "GET /api/v1/integrations",
+    "POST /api/v1/integrations",
+    "POST /api/v1/webhooks",
+    "GET /api/v1/reports"
+  ]
 }

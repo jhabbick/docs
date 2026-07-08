@@ -1,0 +1,55 @@
+---
+title: "Envoy API Error Codes and What They Mean"
+sidebarTitle: "Error Codes"
+description: "A complete reference for Envoy REST API error codes, including HTTP status codes, error strings, meanings, and actionable steps to resolve each error."
+---
+
+When an API request to Envoy fails, the response body always contains a structured error object that tells you exactly what went wrong. Understanding these error codes helps you write more resilient integrations, debug problems faster, and deliver better error messages in your own applications.
+
+## Error Response Format
+
+Every error response from the Envoy API follows this consistent JSON structure:
+
+```json
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid or missing API key.",
+    "status": 401
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `error.code` | string | A machine-readable error code string you can match against in your code |
+| `error.message` | string | A human-readable description of the error, useful for logging and debugging |
+| `error.status` | integer | The HTTP status code, mirrored in the response header |
+
+Use the `error.code` field (not the `error.message`) for programmatic error handling, as messages may change over time while codes remain stable.
+
+## Error Code Reference
+
+| HTTP Status | Error Code | Meaning | How to Resolve |
+|-------------|------------|---------|----------------|
+| **400** | `bad_request` | The request was malformed or missing required fields. | Review the request body against the [API reference](https://api.envoy.com/v1/docs). Check for missing required parameters, invalid field types, or malformed JSON. |
+| **401** | `unauthorized` | The API key is missing, invalid, or has been revoked. | Verify that your `Authorization: Bearer YOUR_API_KEY` header is present and correctly formatted. Regenerate your API key at **Settings → API → API Keys** if needed. |
+| **403** | `forbidden` | The authenticated user or API key does not have permission to perform this action. | Check the role assigned to your account or the scopes assigned to your API key. Admins have full access; Members and Viewers have restricted permissions. |
+| **404** | `not_found` | The requested resource does not exist or is not accessible to your account. | Confirm the resource ID is correct. The resource may have been deleted, or your account may not have access to it. |
+| **409** | `conflict` | The request conflicts with the current state of the resource (e.g., duplicate entry). | Check whether the resource already exists before attempting to create it. Use a GET request to verify the current state before making updates. |
+| **422** | `validation_error` | The request was well-formed but contained semantic validation errors. | Inspect the `error.message` field for details about which fields failed validation. Correct the values and resubmit. |
+| **429** | `rate_limited` | You have exceeded the API rate limit for your plan. | Wait the number of seconds specified in the `Retry-After` response header before retrying. Implement exponential backoff and reduce request frequency. See [rate limiting guidance](/help/common-issues). |
+| **500** | `internal_error` | An unexpected error occurred on Envoy's servers. | This is not caused by your request. Retry the request after a short delay. If the error persists, check [status.envoy.com](https://status.envoy.com) for ongoing incidents and contact [support@envoy.com](mailto:support@envoy.com) if needed. |
+
+## Handling Errors in Your Code
+
+When building integrations with the Envoy API, we recommend the following practices:
+
+- **Always check the HTTP status code** first to categorize the error (client error vs. server error).
+- **Branch on `error.code`** for specific handling — for example, refreshing credentials on `unauthorized` or prompting the user to contact an admin on `forbidden`.
+- **Log `error.message`** to your application logs for debugging, but never display raw API error messages directly to end users.
+- **Retry on `500` and `429`** with exponential backoff. Do not retry on `400`, `401`, `403`, `404`, or `422` — these indicate problems with the request itself that won't resolve on their own.
+
+<Tip>
+  Before assuming an error is caused by your code, check [status.envoy.com](https://status.envoy.com) to see if there is an active incident affecting the Envoy API. Our status page is updated in real time whenever we detect or investigate a platform issue.
+</Tip>
