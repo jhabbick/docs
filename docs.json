@@ -3,26 +3,41 @@
   "theme": "maple",
   "name": "Envoy",
   "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
+    "primary": "#0129DD",
+    "light": "#053EF0",
+    "dark": "#001FA6"
   },
   "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "fonts": {
+    "family": "Instrument Sans",
+    "source": "https://fonts.bunny.net/instrument-sans/files/instrument-sans-latin-400-normal.woff2",
+    "format": "woff2",
+    "heading": {
+      "family": "Instrument Sans",
+      "weight": "700"
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#F7F7F7",
+      "dark": "#010101"
+    }
+  },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:support@envoy.com"
+        "label": "Contact",
+        "href": "mailto:contact@hello-envoy.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Sign In",
-      "href": "https://app.envoy.com"
+      "href": "https://app.hello-envoy.com"
     }
   },
   "navigation": {
@@ -107,8 +122,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/envoy",
-      "linkedin": "https://linkedin.com/company/envoy"
+      "linkedin": "https://www.linkedin.com/company/hello-envoy/"
     }
   }
 }

@@ -1,11 +1,11 @@
 {
   "projectType": "saas",
   "projectName": "Envoy",
-  "projectDescription": "A SaaS platform with technical documentation, help center, marketing comparisons, and a blog for end-users and evaluators.",
+  "projectDescription": "Help center for Envoy — a vendor marketplace that helps people plan projects and connect with the right pros.",
   "theme": "maple",
-  "primaryColor": "#ef7025",
-  "lightColor": "#eec9bc",
-  "darkColor": "#4fa1ab",
+  "primaryColor": "#0129DD",
+  "lightColor": "#053EF0",
+  "darkColor": "#001FA6",
   "navigation": {
     "tabs": [
       {
@@ -87,22 +87,11 @@
     ]
   },
   "keyFeatures": [
-    "Workspace management for teams",
-    "Role-based access control",
-    "Third-party integrations",
-    "REST API with webhook support",
-    "Data export and reporting",
-    "Flexible billing and subscription management",
-    "Enterprise security and SSO"
+    "Project planning and vendor discovery",
+    "Location-based vendor matching",
+    "Vendor and customer account management",
+    "Pro onboarding and registration",
+    "Project search and recommendations"
   ],
-  "publicApiSurface": [
-    "GET /api/v1/workspaces",
-    "POST /api/v1/workspaces",
-    "GET /api/v1/users",
-    "POST /api/v1/users",
-    "GET /api/v1/integrations",
-    "POST /api/v1/integrations",
-    "POST /api/v1/webhooks",
-    "GET /api/v1/reports"
-  ]
+  "publicApiSurface": []
 }

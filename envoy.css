@@ -1,0 +1,30 @@
+@import url("https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700&display=swap");
+
+:root {
+  --envoy-primary: #0129dd;
+  --envoy-surface-dark: #010101;
+  --envoy-surface-light: #f7f7f7;
+}
+
+html.dark #content-container,
+html.dark #content-area {
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 20%, rgba(1, 41, 221, 0.16), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 85% 75%, rgba(120, 60, 180, 0.1), transparent 50%),
+    var(--envoy-surface-dark);
+}
+
+html:not(.dark) #content-container,
+html:not(.dark) #content-area {
+  background: var(--envoy-surface-light);
+}
+
+/* Hide Mintlify "Powered by" watermark */
+footer a[href*="mintlify.com"],
+#footer a[href*="mintlify.com"] {
+  display: none !important;
+}
+
+footer .flex.items-center.justify-between:has(a[href*="mintlify.com"]) {
+  display: none !important;
+}
