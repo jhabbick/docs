@@ -9,6 +9,14 @@
 - This is a documentation site built on [Mintlify](https://mintlify.com)
 - Pages are MDX files with YAML frontmatter
 - Configuration lives in `docs.json`
+- Help Center content lives under `help-center/`, organized by topic:
+  - `get-started/` — onboarding and account setup
+  - `concepts/` — platform fundamentals
+  - `guides/` — step-by-step how-tos
+  - `configuration/` — settings, security, and billing
+  - `faq/` — frequently asked questions
+  - `troubleshooting/` — common issues and support
+- Resources content lives under `resources/`
 - Use the Mintlify MCP server, `https://mcp.mintlify.com`, to edit content and settings via MCP
 - Use the Mintlify docs MCP server, `https://www.mintlify.com/docs/mcp`, to query information about using Mintlify via MCP
 

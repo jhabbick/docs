@@ -9,70 +9,56 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Docs",
+        "tab": "Help Center",
         "groups": [
           {
             "group": "Get Started",
             "pages": [
-              "docs/introduction",
-              "docs/quickstart",
-              "docs/account-setup"
+              "help-center/get-started/introduction",
+              "help-center/get-started/quickstart",
+              "help-center/get-started/account-setup"
             ]
           },
           {
             "group": "Core Concepts",
             "pages": [
-              "docs/concepts/overview",
-              "docs/concepts/workspaces",
-              "docs/concepts/users-and-roles",
-              "docs/concepts/integrations"
+              "help-center/concepts/overview",
+              "help-center/concepts/workspaces",
+              "help-center/concepts/users-and-roles",
+              "help-center/concepts/integrations"
             ]
           },
           {
             "group": "Guides",
             "pages": [
-              "docs/guides/first-integration",
-              "docs/guides/managing-users",
-              "docs/guides/notifications",
-              "docs/guides/data-export"
-            ]
-          },
-          {
-            "group": "API & Webhooks",
-            "pages": [
-              "docs/api/overview",
-              "docs/api/authentication",
-              "docs/api/endpoints",
-              "docs/api/webhooks"
+              "help-center/guides/first-integration",
+              "help-center/guides/managing-users",
+              "help-center/guides/notifications",
+              "help-center/guides/data-export"
             ]
           },
           {
             "group": "Configuration",
             "pages": [
-              "docs/configuration/settings",
-              "docs/configuration/security",
-              "docs/configuration/billing"
+              "help-center/configuration/settings",
+              "help-center/configuration/security",
+              "help-center/configuration/billing"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Help Center",
-        "groups": [
+          },
           {
             "group": "FAQ",
             "pages": [
-              "help/faq-general",
-              "help/faq-billing",
-              "help/faq-integrations"
+              "help-center/faq/general",
+              "help-center/faq/billing",
+              "help-center/faq/integrations"
             ]
           },
           {
             "group": "Troubleshooting",
             "pages": [
-              "help/common-issues",
-              "help/error-codes",
-              "help/contact-support"
+              "help-center/troubleshooting/common-issues",
+              "help-center/troubleshooting/error-codes",
+              "help-center/troubleshooting/contact-support"
             ]
           }
         ]

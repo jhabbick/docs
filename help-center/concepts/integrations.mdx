@@ -15,7 +15,7 @@ Envoy supports four categories of integrations to cover everything from quick pl
     Native integrations are first-party connections built and maintained by Envoy. They are installed in a few clicks directly from the **Integrations** page in your workspace settings, and they handle authentication automatically via OAuth. Native integrations receive ongoing updates as the connected platforms release new features.
   </Tab>
   <Tab title="API Integrations">
-    If a native integration doesn't exist for your tool, you can build your own using the [Envoy REST API](/docs/api/overview). Generate an API key in **Organization Settings → API Keys**, then use standard HTTP requests to read and write data programmatically. Every resource in Envoy is available through the API.
+    If a native integration doesn't exist for your tool, you can build your own using the Envoy REST API. Generate an API key in **Organization Settings → API Keys**, then use standard HTTP requests to read and write data programmatically.
   </Tab>
   <Tab title="Webhooks">
     Webhooks let Envoy push event data to any HTTPS endpoint you control the moment something happens — a new member joins, a workspace is created, a report is exported, and more. Configure webhooks in **Workspace Settings → Webhooks**. Each webhook delivers a signed JSON payload so you can verify its authenticity before processing.
@@ -28,16 +28,16 @@ Envoy supports four categories of integrations to cover everything from quick pl
 ## Popular native integrations
 
 <CardGroup cols={2}>
-  <Card title="Slack" icon="slack" href="/docs/guides/first-integration">
+  <Card title="Slack" icon="slack" href="/help-center/guides/first-integration">
     Receive real-time Envoy notifications in any Slack channel. Get alerts when members join a workspace, reports are ready to export, or integrations encounter errors — all without leaving Slack.
   </Card>
-  <Card title="GitHub" icon="github" href="/docs/guides/first-integration">
+  <Card title="GitHub" icon="github" href="/help-center/guides/first-integration">
     Link Envoy workspaces to GitHub repositories. Automatically sync team membership, trigger Envoy workflows from pull request events, and surface repository activity inside your workspace dashboard.
   </Card>
-  <Card title="Jira" icon="jira" href="/docs/guides/first-integration">
+  <Card title="Jira" icon="jira" href="/help-center/guides/first-integration">
     Create and update Jira issues directly from Envoy. Map Envoy workspace activity to Jira projects and keep engineering and operations teams aligned without duplicating data entry.
   </Card>
-  <Card title="Salesforce" icon="salesforce" href="/docs/guides/first-integration">
+  <Card title="Salesforce" icon="salesforce" href="/help-center/guides/first-integration">
     Sync Envoy workspace data with Salesforce objects. Keep customer records, account activity, and team interactions consistent across both platforms to give revenue teams a single source of truth.
   </Card>
 </CardGroup>
@@ -64,4 +64,4 @@ Rotate API keys at any time from the same settings page. Revoked keys stop worki
   Native integrations for Slack and GitHub are available on all plans. Jira and Salesforce integrations require a **Growth** or **Enterprise** plan. Custom webhook endpoints and Zapier support are available on **Growth** and above. Check your current plan in **Organization Settings → Billing**.
 </Note>
 
-Ready to set up your first connection? Follow the [First Integration guide](/docs/guides/first-integration) for a step-by-step walkthrough.
+Ready to set up your first connection? Follow the [First Integration guide](/help-center/guides/first-integration) for a step-by-step walkthrough.

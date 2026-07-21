@@ -38,7 +38,7 @@ Use the `error.code` field (not the `error.message`) for programmatic error hand
 | **404** | `not_found` | The requested resource does not exist or is not accessible to your account. | Confirm the resource ID is correct. The resource may have been deleted, or your account may not have access to it. |
 | **409** | `conflict` | The request conflicts with the current state of the resource (e.g., duplicate entry). | Check whether the resource already exists before attempting to create it. Use a GET request to verify the current state before making updates. |
 | **422** | `validation_error` | The request was well-formed but contained semantic validation errors. | Inspect the `error.message` field for details about which fields failed validation. Correct the values and resubmit. |
-| **429** | `rate_limited` | You have exceeded the API rate limit for your plan. | Wait the number of seconds specified in the `Retry-After` response header before retrying. Implement exponential backoff and reduce request frequency. See [rate limiting guidance](/help/common-issues). |
+| **429** | `rate_limited` | You have exceeded the API rate limit for your plan. | Wait the number of seconds specified in the `Retry-After` response header before retrying. Implement exponential backoff and reduce request frequency. See [rate limiting guidance](/help-center/troubleshooting/common-issues). |
 | **500** | `internal_error` | An unexpected error occurred on Envoy's servers. | This is not caused by your request. Retry the request after a short delay. If the error persists, check [status.envoy.com](https://status.envoy.com) for ongoing incidents and contact [support@envoy.com](mailto:support@envoy.com) if needed. |
 
 ## Handling Errors in Your Code
