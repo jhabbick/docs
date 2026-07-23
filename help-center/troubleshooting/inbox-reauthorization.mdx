@@ -1,0 +1,50 @@
+---
+title: "Inbox reauthorization"
+sidebarTitle: "Reauthorization"
+description: "Fix a Gmail or Microsoft inbox that shows Reauthorization required."
+icon: "rotate"
+---
+
+## What you'll accomplish
+
+Restore a disconnected or expired inbox connection so outreach can send again.
+
+## Symptoms
+
+- **Account → Connected Email Accounts** shows **Reauthorization required**
+- Outreach messages fail with **Send failed** or **Needs attention**
+- **Renewal required** appears on the connection card
+
+## Why this happens
+
+Email providers periodically require you to re-approve permissions. This is normal — your inbox token expired or was revoked.
+
+## Steps to fix
+
+1. Go to **Account → Connected Email Accounts**.
+
+2. Find the connection with **Reauthorization required**.
+
+3. Click the reconnect or reauthorize action (or **Replace with Gmail** / **Replace with Microsoft** if needed).
+
+4. Complete the provider authorization flow in your browser.
+
+5. Confirm status returns to **Active**.
+
+6. Return to **Outreach** and retry any failed messages.
+
+## Prevent future interruptions
+
+- Avoid revoking Envoy's access in your Google or Microsoft account settings unless you intend to disconnect
+- Reconnect promptly when you see **Reauthorization required** — delayed reauth may cause missed reply sync
+
+## Still having trouble?
+
+1. **Disconnect** the inbox from **Account**, then connect again fresh.
+2. Check that you're authorizing the correct Google or Microsoft account.
+3. See [Troubleshoot outreach](/help-center/outreach/troubleshoot-outreach) for send-specific errors.
+
+## Related
+
+- [Manage connected email](/help-center/account/manage-connected-email)
+- [Connect your email](/help-center/outreach/connect-your-email)

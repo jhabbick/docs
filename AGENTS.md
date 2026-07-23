@@ -1,33 +1,64 @@
-> **First-time setup**: Customize this file for your project. Prompt the user to customize this file for their project.
-> For Mintlify product knowledge (components, configuration, writing standards),
-> install the Mintlify skill: `npx skills add https://mintlify.com/docs`
-
 # Documentation project instructions
 
 ## About this project
 
-- This is a documentation site built on [Mintlify](https://mintlify.com)
-- Pages are MDX files with YAML frontmatter
-- Configuration lives in `docs.json`
-- Use the Mintlify MCP server, `https://mcp.mintlify.com`, to edit content and settings via MCP
-- Use the Mintlify docs MCP server, `https://www.mintlify.com/docs/mcp`, to query information about using Mintlify via MCP
+- Mintlify documentation site for the **Envoy** consumer product
+- Configuration: `docs.json`
+- Consumer help center content: `help-center/`
+- Reusable snippets: `snippets/`
+- Screenshots: `images/`
 
 ## Terminology
 
-{/* Add product-specific terms and preferred usage */}
-{/* Example: Use "workspace" not "project", "member" not "user" */}
+Use UI labels exactly as they appear in the app:
 
-## Style preferences
+| Use this | Not this |
+|----------|----------|
+| **Contacts** | vendors (in consumer-facing docs) |
+| **Pro** | vendor account (when referring to account type) |
+| **Outreach** | email service / inbox sync |
+| **Connected Email Accounts** | OAuth / inbox authorization |
+| **Dashboard** | home page |
+| **Overview**, **Chat**, **Outreach** | project tabs (capitalize) |
 
-{/* Add any project-specific style rules below */}
+**Contacts** are service providers — not personal address-book entries.
 
-- Use active voice and second person ("you")
-- Keep sentences concise — one idea per sentence
-- Use sentence case for headings
-- Bold for UI elements: Click **Settings**
-- Code formatting for file names, commands, paths, and code references
+## Product URLs
 
-## Content boundaries
+- App: https://app.hello-envoy.com
+- Contact: https://app.hello-envoy.com/contact
+- Privacy: https://app.hello-envoy.com/privacy
+- Terms: https://app.hello-envoy.com/terms
 
-{/* Define what should and shouldn't be documented */}
-{/* Example: Don't document internal admin features */}
+## Style
+
+- Active voice, second person ("you")
+- Sentence case for headings
+- Bold UI labels: Click **New message**
+- Lead with outcome, then steps
+- Avoid engineering terms (reasoning engine, OAuth, API)
+
+## Do not document
+
+- Email-and-password sign-in or registration (not supported — Google and Outlook only)
+- Billing/subscriptions UI (not in product yet)
+- Admin features
+- Analytics/reporting dashboards
+- Approved Pro workspace (pending UI)
+- Standalone `/inbox/emails` viewer (not in main nav)
+
+## Content structure
+
+| Folder | Purpose |
+|--------|---------|
+| `help-center/get-started/` | Onboarding funnel |
+| `help-center/projects/` | Dashboard and project workspace |
+| `help-center/contacts/` | Contact discovery and directory |
+| `help-center/outreach/` | Email draft, send, reply |
+| `help-center/account/` | Settings |
+| `help-center/troubleshooting/` | Self-service support |
+| `help-center/pros/` | Service provider registration |
+
+## Screenshots
+
+Capture from the running app using `scripts/capture-screenshots.mjs`. See `images/README.md` for the full inventory.

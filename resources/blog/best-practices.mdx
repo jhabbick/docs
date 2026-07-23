@@ -1,77 +1,17 @@
 ---
-title: "5 Proven Best Practices for Managing Your Team in Envoy"
-sidebarTitle: "Best Practices"
-description: "Discover five proven strategies for structuring workspaces, enforcing access control, and keeping your team secure and productive in Envoy."
+title: "Best practices"
+sidebarTitle: "Best practices"
+description: "Tips for planning projects and working with contacts in Envoy."
 ---
 
-Getting a team set up in Envoy is straightforward — getting it set up *well* is where the real leverage is. The difference between a workspace that feels effortless and one that slowly becomes a source of confusion often comes down to a handful of early decisions: how you structure your workspaces, which roles you assign by default, and whether you've wired up the right automations before your team hits a hundred members. The five practices below are drawn from what we see working consistently across high-performing Envoy customers, from lean startups to enterprise orgs.
+This is where we'll share practical advice for getting the most out of Envoy — from writing outreach that gets replies to organizing multi-vendor projects.
 
----
+Our first articles are in the works. Check back soon.
 
-## 1. Structure Workspaces by Function, Not Project
-
-It's tempting to spin up a new workspace for every initiative, but project-based workspaces tend to sprawl quickly and leave members straddling too many contexts at once. Instead, organize workspaces around stable business functions — Engineering, Go-to-Market, Operations, Support — and let projects live as tagged activity within those spaces. This keeps membership lists predictable, reduces the number of role assignments to maintain, and means that when someone joins the Sales team, there's exactly one workspace to add them to.
-
-<Tip>
-  Audit your workspace list quarterly. If a workspace has fewer than three active members or hasn't had meaningful activity in 60 days, consider archiving it or merging it into a parent workspace.
-</Tip>
+<Note>
+  New to Envoy? Start with [Find contacts before signing up](/help-center/get-started/find-contacts-before-signing-up) or [How Envoy works](/help-center/get-started/how-envoy-works).
+</Note>
 
 ---
 
-## 2. Use the Least-Privilege Role Model
-
-When in doubt, assign the **Viewer** role. It sounds conservative, but starting from minimum access and elevating on request is far easier to manage — and far safer — than walking back over-permissioned members after the fact. Envoy's role hierarchy (Viewer → Member → Admin → Owner) is designed to make this approach painless: Viewers can see what they need to stay informed, and elevation requests take seconds with the right admin tooling.
-
-For Enterprise customers, the Custom Role Builder takes this even further, letting you define permission sets that map precisely to a team member's actual responsibilities rather than forcing them into a broad predefined role.
-
-<Tip>
-  Set a workspace policy that all net-new members are provisioned as Viewers by default. Use the API or Bulk Member Import to assign elevated roles in bulk only when your onboarding process has verified need.
-</Tip>
-
----
-
-## 3. Connect Your Notification Stack Early
-
-Envoy becomes significantly more powerful the moment it's connected to the tools your team already lives in. Configure your Slack integration, email notification rules, and webhook endpoints before you start scaling membership — not after. If people find out about important workspace events through a colleague rather than an automated notification, trust in the system erodes fast.
-
-A solid notification stack means: Slack alerts for critical role changes and new member joins, email digests for weekly activity summaries, and webhooks piping events into your data warehouse or incident management tool. With Webhook Event Filtering, you can now be surgical about which events go where.
-
-<Tip>
-  Create a dedicated `#envoy-alerts` Slack channel during initial setup. Route high-signal events there — new admin grants, failed SSO logins, bulk imports — so the signal never gets buried in a general notifications channel.
-</Tip>
-
----
-
-## 4. Automate Member Onboarding with the API
-
-Manual onboarding doesn't scale, and it introduces inconsistency — someone inevitably gets the wrong role, or doesn't get added to the right workspace, or joins a week late because a ticket got lost. Envoy's REST API and Bulk Member Import feature make it straightforward to automate the entire onboarding flow: pull new hire data from your HRIS, POST to the members endpoint with the correct role and workspace, and trigger a welcome webhook to kick off downstream tasks in Zapier or your internal tooling.
-
-For teams using SSO, attribute mapping lets your identity provider drive role assignments automatically, so the API work is a one-time setup rather than a recurring chore.
-
-<Tip>
-  Build a simple onboarding script that reads from your HR system and calls the Envoy API on a nightly schedule. Even a basic implementation eliminates the most common source of "why can't I access X?" tickets in the first week of a new hire's tenure.
-</Tip>
-
----
-
-## 5. Enable Audit Logs and Review Them Monthly
-
-Audit logs are not just a compliance checkbox — they're one of the most underused tools for understanding what's actually happening in your workspace. Envoy logs every significant action: member additions and removals, role changes, integration connections and disconnections, data exports, and API token creations. Reviewing these logs monthly gives you an early warning system for permission creep, unusual access patterns, and integration sprawl before they become real problems.
-
-With the new audit log export filters, you can narrow your monthly review to the highest-risk event types and export a clean CSV for your security or compliance team in seconds.
-
-<Tip>
-  Assign ownership of the monthly audit review to a specific person — ideally your workspace Owner or a Security lead. Put it on the calendar as a recurring 30-minute task. Consistency matters more than depth: a quick scan every month beats an exhaustive review once a year.
-</Tip>
-
----
-
-Building good habits in Envoy early pays compounding dividends as your team grows. If you're just getting started or want to revisit the fundamentals, the introduction guide below covers everything from workspace setup to your first integration.
-
-<Card
-  title="Read the Introduction Guide"
-  icon="book-open"
-  href="docs/introduction"
->
-  New to Envoy? The Introduction guide walks you through core concepts — workspaces, roles, integrations, and the API — so you can hit the ground running with confidence.
-</Card>
+*Last updated: placeholder — content coming soon.*

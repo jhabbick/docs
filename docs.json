@@ -1,97 +1,112 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "maple",
-  "name": "Envoy",
+  "name": "Envoy Help Center",
   "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
+    "primary": "#0129DD",
+    "light": "#053EF0",
+    "dark": "#001FA6"
   },
   "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "fonts": {
+    "family": "Instrument Sans",
+    "source": "https://fonts.bunny.net/instrument-sans/files/instrument-sans-latin-400-normal.woff2",
+    "format": "woff2",
+    "heading": {
+      "family": "Instrument Sans",
+      "weight": "700"
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#F7F7F7",
+      "dark": "#010101"
+    }
+  },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:support@envoy.com"
+        "label": "Contact",
+        "href": "https://app.hello-envoy.com/contact"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Sign In",
-      "href": "https://app.envoy.com"
+      "label": "Get Started",
+      "href": "https://app.hello-envoy.com"
     }
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "Docs",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "docs/introduction",
-              "docs/quickstart",
-              "docs/account-setup"
-            ]
-          },
-          {
-            "group": "Core Concepts",
-            "pages": [
-              "docs/concepts/overview",
-              "docs/concepts/workspaces",
-              "docs/concepts/users-and-roles",
-              "docs/concepts/integrations"
-            ]
-          },
-          {
-            "group": "Guides",
-            "pages": [
-              "docs/guides/first-integration",
-              "docs/guides/managing-users",
-              "docs/guides/notifications",
-              "docs/guides/data-export"
-            ]
-          },
-          {
-            "group": "API & Webhooks",
-            "pages": [
-              "docs/api/overview",
-              "docs/api/authentication",
-              "docs/api/endpoints",
-              "docs/api/webhooks"
-            ]
-          },
-          {
-            "group": "Configuration",
-            "pages": [
-              "docs/configuration/settings",
-              "docs/configuration/security",
-              "docs/configuration/billing"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "Help Center",
         "groups": [
           {
-            "group": "FAQ",
+            "group": "Getting Started",
             "pages": [
-              "help/faq-general",
-              "help/faq-billing",
-              "help/faq-integrations"
+              "help-center/get-started/what-is-envoy",
+              "help-center/get-started/how-envoy-works",
+              "help-center/get-started/find-contacts-before-signing-up",
+              "help-center/get-started/create-your-account",
+              "help-center/get-started/complete-your-first-project"
+            ]
+          },
+          {
+            "group": "Projects",
+            "pages": [
+              "help-center/projects/dashboard-overview",
+              "help-center/projects/create-a-project",
+              "help-center/projects/project-overview-tab",
+              "help-center/projects/ai-chat-planning",
+              "help-center/projects/edit-or-delete-a-project"
+            ]
+          },
+          {
+            "group": "Contacts",
+            "pages": [
+              "help-center/contacts/contacts-overview",
+              "help-center/contacts/find-and-add-contacts",
+              "help-center/contacts/attach-contacts-to-projects",
+              "help-center/contacts/contact-badges-explained"
+            ]
+          },
+          {
+            "group": "Outreach",
+            "pages": [
+              "help-center/outreach/outreach-overview",
+              "help-center/outreach/connect-your-email",
+              "help-center/outreach/create-and-send-a-message",
+              "help-center/outreach/revise-with-ai",
+              "help-center/outreach/reply-to-contacts",
+              "help-center/outreach/troubleshoot-outreach"
+            ]
+          },
+          {
+            "group": "Account & Settings",
+            "pages": [
+              "help-center/account/account-settings",
+              "help-center/account/manage-connected-email",
+              "help-center/account/sign-in",
+              "help-center/account/appearance-and-theme",
+              "help-center/account/data-privacy-preferences"
             ]
           },
           {
             "group": "Troubleshooting",
             "pages": [
-              "help/common-issues",
-              "help/error-codes",
-              "help/contact-support"
+              "help-center/troubleshooting/common-issues",
+              "help-center/troubleshooting/inbox-reauthorization",
+              "help-center/troubleshooting/draft-session-expired"
+            ]
+          },
+          {
+            "group": "For Pros",
+            "pages": [
+              "help-center/pros/join-as-a-pro"
             ]
           }
         ]
@@ -103,8 +118,8 @@
             "group": "Comparisons",
             "pages": [
               "resources/why-envoy",
-              "resources/comparison-overview",
-              "resources/enterprise-vs-starter"
+              "resources/envoy-vs-angi",
+              "resources/envoy-vs-thumbtack"
             ]
           },
           {
@@ -121,8 +136,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/envoy",
-      "linkedin": "https://linkedin.com/company/envoy"
+      "linkedin": "https://www.linkedin.com/company/hello-envoy/"
     }
   }
 }
