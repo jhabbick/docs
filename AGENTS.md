@@ -37,6 +37,7 @@ Use UI labels exactly as they appear in the app:
 - Bold UI labels: Click **New message**
 - Lead with outcome, then steps
 - Avoid engineering terms (reasoning engine, OAuth, API)
+- Prefer **Envoy**-forward language over generic "AI" branding — e.g. **Revise with Envoy**, **Plan with Envoy**, Envoy-drafted messages
 
 ## Do not document
 

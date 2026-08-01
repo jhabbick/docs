@@ -1,0 +1,27 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "Mintlify documentation for [Envoy](https://app.hello-envoy.com) — plan any project, line up the contacts, and send outreach from your own inbox.",
+  "main": "index.js",
+  "scripts": {
+    "capture-screenshots": "node scripts/capture-screenshots.mjs --base-url http://127.0.0.1:18080",
+    "capture-screenshots:prod": "node scripts/capture-screenshots.mjs --base-url https://app.hello-envoy.com",
+    "capture-screenshots:all": "node scripts/setup-and-capture-screenshots.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhabbick/docs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jhabbick/docs/issues"
+  },
+  "homepage": "https://github.com/jhabbick/docs#readme",
+  "devDependencies": {
+    "embedded-postgres": "^18.4.0-beta.17",
+    "playwright": "^1.62.1"
+  }
+}

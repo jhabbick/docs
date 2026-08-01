@@ -61,7 +61,7 @@
               "help-center/projects/dashboard-overview",
               "help-center/projects/create-a-project",
               "help-center/projects/project-overview-tab",
-              "help-center/projects/ai-chat-planning",
+              "help-center/projects/chat-planning",
               "help-center/projects/edit-or-delete-a-project"
             ]
           },
@@ -80,7 +80,7 @@
               "help-center/outreach/outreach-overview",
               "help-center/outreach/connect-your-email",
               "help-center/outreach/create-and-send-a-message",
-              "help-center/outreach/revise-with-ai",
+              "help-center/outreach/revise-with-envoy",
               "help-center/outreach/reply-to-contacts",
               "help-center/outreach/troubleshoot-outreach"
             ]
