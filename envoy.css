@@ -6,17 +6,56 @@
   --envoy-surface-light: #f7f7f7;
 }
 
-html.dark #content-container,
-html.dark #content-area {
+/* Paint the page surface, not the text column — an opaque #content-area
+   creates a visible left edge while scrolling in dark mode. */
+html.dark #background-color {
   background:
     radial-gradient(ellipse 80% 50% at 15% 20%, rgba(1, 41, 221, 0.16), transparent 55%),
     radial-gradient(ellipse 60% 40% at 85% 75%, rgba(120, 60, 180, 0.1), transparent 50%),
     var(--envoy-surface-dark);
 }
 
+html:not(.dark) #background-color {
+  background: var(--envoy-surface-light);
+}
+
+html.dark #content-container,
+html.dark #content-area,
 html:not(.dark) #content-container,
 html:not(.dark) #content-area {
-  background: var(--envoy-surface-light);
+  background: transparent !important;
+}
+
+html.dark #sidebar {
+  border-right-color: transparent;
+}
+
+html.dark #sidebar [class*="pointer-events-none"][class*="rounded-full"] {
+  opacity: 0 !important;
+  background: transparent !important;
+}
+
+/* Screenshot pairs: foo.png (light) + foo-dark.png (dark).
+   Mintlify wraps <img> in [data-rmiz] { display: contents }, which can keep
+   Tailwind dark:hidden / dark:block from actually swapping screenshots. */
+img[src^="/images/"][src$=".png"] {
+  border-radius: 0.75rem;
+}
+img[src*="-dark.png"] {
+  display: none !important;
+}
+
+html.dark img[src*="-dark.png"] {
+  display: block !important;
+}
+
+html.dark img[src$=".png"]:not([src*="-dark.png"]) {
+  display: none !important;
+}
+
+html:not(.dark) [data-rmiz]:has(img[src*="-dark.png"]),
+html.dark [data-rmiz]:has(img[src$=".png"]:not([src*="-dark.png"])) {
+  display: none !important;
 }
 
 /* Hide Mintlify "Powered by" watermark */

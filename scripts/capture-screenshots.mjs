@@ -4,6 +4,8 @@
  *
  * Usage:
  *   node scripts/capture-screenshots.mjs --base-url http://127.0.0.1:18080
+ *   node scripts/capture-screenshots.mjs --base-url http://127.0.0.1:18080 --scheme dark
+ *   node scripts/capture-screenshots.mjs --base-url https://app.hello-envoy.com --path search-results-badges
  *
  * Requires Playwright. Installs from envoy-project-management when available:
  *   cd ../envoy-project-management && npm i && npx playwright install chromium
@@ -26,6 +28,9 @@ const baseUrl = (baseUrlIndex >= 0 ? args[baseUrlIndex + 1] : 'http://127.0.0.1:
 )
 
 const PROJECT_ALPHA_UUID = 'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'
+const FEATURED_CONTACT = 'Petal & Stem'
+const WEDDING_INTAKE =
+  'Outdoor garden wedding for 120 guests in Charleston this June — ceremony, florist, catering, and photography'
 
 function appUrl(path) {
   return new URL(path, `${baseUrl}/`).toString()
@@ -127,6 +132,17 @@ async function captureSection(page, dest, section) {
   })
 }
 
+function themedPath(path, scheme) {
+  return scheme === 'dark' ? path.replace(/\.png$/, '-dark.png') : path
+}
+
+const pathFilterIndex = args.indexOf('--path')
+const pathFilter = pathFilterIndex >= 0 ? args[pathFilterIndex + 1] : null
+const schemesArgIndex = args.indexOf('--scheme')
+const schemes = schemesArgIndex >= 0 ? [args[schemesArgIndex + 1]] : ['light', 'dark']
+
+let currentDest = ''
+
 async function loginAlice(page, context) {
   await context.clearCookies()
   await login(page, { email: 'alice@example.com', password: 'hashedpassword1' })
@@ -138,18 +154,26 @@ async function openNewProjectWizard(page) {
   await page.reload({ waitUntil: 'networkidle' })
   await page.getByRole('button', { name: '+ New project' }).click()
   await page.getByRole('heading', { name: 'Essentials' }).waitFor()
+  await page.getByPlaceholder('Enter project title').fill('Our Charleston Wedding')
+  await page.getByPlaceholder('Describe your project...').fill(
+    'Garden ceremony and candlelit reception for 120 guests this June'
+  )
+  await page.locator('#create-location').fill('29401')
 }
 
 async function openOutreachDraft(page) {
   await page.goto(appUrl(`/projects/${PROJECT_ALPHA_UUID}`), { waitUntil: 'networkidle' })
   await page.getByRole('radio', { name: 'outreach' }).click({ force: true })
-  await page.getByRole('radio', { name: 'outreach' }).waitFor()
-  const newMessage = page.getByRole('button', { name: 'New message' }).first()
-  if (await newMessage.isVisible().catch(() => false)) {
-    await newMessage.click()
-    await page.getByRole('button', { name: 'Create draft' }).click()
-  }
-  await page.getByRole('heading', { name: /Draft to Acme Corp/i }).waitFor({ timeout: 45000 })
+  await page.getByRole('heading', { name: 'Inbox' }).waitFor()
+  const seededThread = page.getByRole('button', { name: /June 20 florals/i }).first()
+  await seededThread.waitFor({ timeout: 20000 })
+  await seededThread.click()
+  await page.getByRole('heading', { name: new RegExp(`Draft to ${FEATURED_CONTACT}`, 'i') }).waitFor()
+  await page.getByLabel('Subject').waitFor()
+  await page.waitForFunction(() => {
+    const input = document.querySelector('label input[type="text"]')
+    return Boolean(input && /June 20 florals/i.test(input.value || ''))
+  })
 }
 
 async function main() {
@@ -164,11 +188,8 @@ async function main() {
   }
 
   const browser = await chromium.launch()
-  const context = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
-    colorScheme: 'light',
-  })
-  const page = await context.newPage()
+  let context
+  let page
   const failures = []
 
   const shots = [
@@ -176,7 +197,8 @@ async function main() {
       path: 'images/getting-started/landing-intake.png',
       run: async () => {
         await page.goto(appUrl('/'), { waitUntil: 'networkidle' })
-        await page.getByLabel('What are you planning?').waitFor()
+        await page.getByLabel('What are you planning?').fill(WEDDING_INTAKE)
+        await page.getByLabel(/ZIP or postal code/i).fill('29401')
       },
     },
     {
@@ -202,15 +224,23 @@ async function main() {
     {
       path: 'images/getting-started/search-results-badges.png',
       skipOnLocalWithoutReasoningEngine: true,
+      fullPage: true,
       run: async () => {
         await context.clearCookies()
         await page.goto(appUrl('/'), { waitUntil: 'networkidle' })
-        await page.getByLabel('What are you planning?').fill(
-          'Kitchen remodel with new cabinets, countertops, and electrical updates'
-        )
-        await page.getByLabel(/ZIP or postal code/i).fill('23220')
+        await page.getByLabel('What are you planning?').fill(WEDDING_INTAKE)
+        await page.getByLabel(/ZIP or postal code/i).fill('29401')
         await page.getByRole('button', { name: 'Search' }).click()
         await page.getByText('Contacts for your project').waitFor({ timeout: 45000 })
+        const readyOnly = page.getByLabel(/Only show contacts ready for outreach/i)
+        if (await readyOnly.isChecked().catch(() => false)) {
+          await readyOnly.uncheck()
+          await page.getByText(/Florist|Flower Store|Cater/i).first().waitFor({ timeout: 20000 })
+        }
+        const badge = page.getByText(/Onboarded to Envoy|Unverified listing/i).first()
+        if (await badge.isVisible().catch(() => false)) {
+          await badge.scrollIntoViewIfNeeded()
+        }
       },
     },
     {
@@ -242,7 +272,7 @@ async function main() {
       run: async () => {
         await page.goto(appUrl('/account'), { waitUntil: 'networkidle' })
         const section = page.locator('section').filter({ hasText: 'Data & Privacy' }).first()
-        await captureSection(page, join(root, 'images/account/data-privacy.png'), section)
+        await captureSection(page, currentDest, section)
         return 'handled'
       },
     },
@@ -251,7 +281,7 @@ async function main() {
       run: async () => {
         await page.goto(appUrl('/account'), { waitUntil: 'networkidle' })
         const section = page.locator('section').filter({ hasText: 'Default project location' }).first()
-        await captureSection(page, join(root, 'images/account/default-location.png'), section)
+        await captureSection(page, currentDest, section)
         return 'handled'
       },
     },
@@ -280,7 +310,7 @@ async function main() {
         await context.clearCookies()
         const email = `docs-empty-${Date.now()}@example.com`
         await registerUser(page, {
-          fullName: 'Docs Empty User',
+          fullName: 'Sophie Wells',
           email,
           password: 'hashedpassword1',
         })
@@ -316,7 +346,7 @@ async function main() {
         await login(page, { email: 'alice@example.com', password: 'hashedpassword1' })
         await page.goto(appUrl('/contacts'), { waitUntil: 'networkidle' })
         await page.getByRole('heading', { name: 'Contacts', exact: true }).waitFor()
-        await page.getByText('Acme Corp', { exact: true }).waitFor()
+        await page.getByText(FEATURED_CONTACT, { exact: true }).waitFor()
       },
     },
     {
@@ -333,12 +363,19 @@ async function main() {
         await openOutreachDraft(page)
         const attachButton = page.getByRole('button', { name: 'Attach files' }).first()
         await attachButton.waitFor()
-        const fixture = join(tmpdir(), 'envoy-docs-sample-attachment.txt')
-        await writeFile(fixture, 'Sample notes to share with the contact.\n')
-        const fileInput = page.locator('#outreach-attachment-input')
+        const fixture = join(tmpdir(), 'ceremony-timeline.txt')
+        await writeFile(
+          fixture,
+          'Ceremony at 5pm under the oaks, cocktail hour in the garden, dinner at 7.\n'
+        )
+        const fileInput = page.locator('input[id^="draft-attachment-input-"]').first()
         if (await fileInput.count()) {
           await fileInput.setInputFiles(fixture)
-          await page.getByText('Ready').first().waitFor({ timeout: 15000 }).catch(() => {})
+          const chip = page.getByText('ceremony-timeline.txt').first()
+          await chip.waitFor({ timeout: 15000 }).catch(() => {})
+          if (await chip.isVisible().catch(() => false)) {
+            await chip.scrollIntoViewIfNeeded()
+          }
         }
       },
     },
@@ -348,7 +385,7 @@ async function main() {
         await context.clearCookies()
         const email = `docs-vendor-${Date.now()}@example.com`
         await registerUser(page, {
-          fullName: 'Richmond Pro',
+          fullName: 'Lila Rose',
           email,
           password: 'hashedpassword1',
           accountType: 'vendor',
@@ -363,37 +400,68 @@ async function main() {
         }
         await page.goto(appUrl('/vendor/pending'), { waitUntil: 'networkidle' })
         await page.getByRole('heading', { name: /on the list/i }).waitFor()
-        await page.getByText(/Richmond Pro/).waitFor()
+        await page.getByText(/Lila Rose/).waitFor()
         await page.getByText(/What happens next/i).waitFor()
       },
     },
   ]
 
-  for (const shot of shots) {
-    const dest = join(root, shot.path)
-    try {
-      if (shot.skipOnLocalWithoutReasoningEngine && baseUrl.includes('127.0.0.1')) {
-        let reasoningReady = false
-        try {
-          const response = await fetch('http://127.0.0.1:8081/health')
-          reasoningReady = response.ok
-        } catch {
-          reasoningReady = false
-        }
-        if (!reasoningReady) {
-          console.log(`⊘ ${shot.path}: skipped locally (reasoning-engine not running)`)
-          continue
-        }
-      }
-
-      const result = await shot.run()
-      if (result !== 'handled') {
-        await capture(page, dest)
-      }
-    } catch (err) {
-      failures.push({ path: shot.path, error: err.message })
-      console.warn(`✗ ${shot.path}: ${err.message}`)
+  for (const scheme of schemes) {
+    if (scheme !== 'light' && scheme !== 'dark') {
+      throw new Error(`Unknown --scheme ${scheme}. Use light or dark.`)
     }
+
+    context = await browser.newContext({
+      viewport: { width: 1280, height: 900 },
+      colorScheme: scheme,
+    })
+    await context.addInitScript((mode) => {
+      localStorage.setItem('color-mode', mode)
+    }, scheme)
+    page = await context.newPage()
+    // Local screenshot env has no email-sync queue. Outreach's initial POST /sync
+    // 500s and never loads threads; serve the GET state payload instead.
+    await page.route('**/api/projects/**/outreach/sync', async (route) => {
+      const getUrl = route.request().url().replace(/\/sync$/, '')
+      const response = await route.fetch({ url: getUrl, method: 'GET' })
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: await response.text(),
+      })
+    })
+    console.log(`\nCapturing ${scheme} screenshots...`)
+
+    for (const shot of shots) {
+      if (pathFilter && !shot.path.includes(pathFilter)) continue
+
+      currentDest = join(root, themedPath(shot.path, scheme))
+      try {
+        if (shot.skipOnLocalWithoutReasoningEngine && baseUrl.includes('127.0.0.1')) {
+          let reasoningReady = false
+          try {
+            const response = await fetch('http://127.0.0.1:8081/health')
+            reasoningReady = response.ok
+          } catch {
+            reasoningReady = false
+          }
+          if (!reasoningReady) {
+            console.log(`⊘ ${themedPath(shot.path, scheme)}: skipped locally (reasoning-engine not running)`)
+            continue
+          }
+        }
+
+        const result = await shot.run()
+        if (result !== 'handled') {
+          await capture(page, currentDest, { fullPage: shot.fullPage })
+        }
+      } catch (err) {
+        failures.push({ path: themedPath(shot.path, scheme), error: err.message })
+        console.warn(`✗ ${themedPath(shot.path, scheme)}: ${err.message}`)
+      }
+    }
+
+    await context.close()
   }
 
   await browser.close()

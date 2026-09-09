@@ -129,6 +129,12 @@ async function main() {
     await run('node', ['ace', 'migration:run'])
     await run('node', ['ace', 'db:seed'])
 
+    console.log('Applying wedding screenshot data...')
+    await run('node', [join(docsRoot, 'scripts', 'seed-screenshot-wedding-data.mjs')], {
+      cwd: docsRoot,
+      env: dbEnv,
+    })
+
     console.log('Starting Envoy app on http://127.0.0.1:18080 ...')
     await ensurePortFree(18080)
     server = spawn('node', ['ace', 'serve', '--no-clear'], {
@@ -153,8 +159,18 @@ async function main() {
       await delay(1000)
       if (!server.killed) server.kill('SIGKILL')
     }
-    await pg.stop()
-    await rm(pgDataDir, { recursive: true, force: true })
+    try {
+      await Promise.race([
+        pg.stop(),
+        delay(8000),
+      ])
+    } catch (error) {
+      console.warn(`Postgres stop failed: ${error.message}`)
+    }
+    await delay(500)
+    await rm(pgDataDir, { recursive: true, force: true }).catch((error) => {
+      console.warn(`Could not remove Postgres data dir: ${error.message}`)
+    })
   }
 }
 
