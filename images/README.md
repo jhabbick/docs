@@ -29,8 +29,8 @@ Playwright is resolved from `../envoy-project-management/node_modules/playwright
 | `search-results-badges.png` | `/` | Results with Onboarded/Unverified badges |
 | `registration-form.png` | `/register` | Create account + mailbox checkbox |
 | `consent-preferences.png` | `/onboarding/consent` | Choose your data preferences (login as bob@example.com without consent) |
-| `project-wizard.png` | `/dashboard` | New project wizard Essentials step |
-| `journey-overview.svg` | — | Diagram (Mermaid/SVG — not a live capture) |
+| `project-wizard.png` | `/dashboard` | New project wizard Essentials step (title, description, location) |
+| `journey-overview.svg` | — | Unused placeholder (How it works now uses `projects/project-overview.png`) |
 
 ## projects/
 
@@ -38,7 +38,7 @@ Playwright is resolved from `../envoy-project-management/node_modules/playwright
 |------|------|-------|
 | `dashboard-empty.png` | `/dashboard` | No projects yet state |
 | `dashboard-populated.png` | `/dashboard` | Recent projects list |
-| `project-wizard.png` | `/dashboard` | New project wizard |
+| `project-wizard.png` | `/dashboard` | New project wizard Essentials |
 | `project-overview.png` | `/projects/:uuid` | Overview tab |
 | `project-chat.png` | `/projects/:uuid` | Chat tab |
 | `contacts-page.png` | `/contacts` | Contacts directory |
@@ -48,6 +48,7 @@ Playwright is resolved from `../envoy-project-management/node_modules/playwright
 | File | Page | Notes |
 |------|------|-------|
 | `new-message.png` | `/projects/:uuid` outreach tab | Compose draft |
+| `attach-files.png` | `/projects/:uuid` outreach tab | Attach files drop zone and chips |
 
 ## account/
 
@@ -56,6 +57,7 @@ Playwright is resolved from `../envoy-project-management/node_modules/playwright
 | `account-settings.png` | `/account` | Full Account page |
 | `email-connections.png` | `/account#email-accounts` | Connected Email Accounts section |
 | `data-privacy.png` | `/account` | Data & Privacy section (cropped) |
+| `default-location.png` | `/account` | Default project location section (cropped) |
 | `vendor-pending.png` | `/vendor/pending` | Pro pending approval |
 
 ## Legacy placeholders

@@ -8,7 +8,8 @@
  * Requires Playwright. Installs from envoy-project-management when available:
  *   cd ../envoy-project-management && npm i && npx playwright install chromium
  */
-import { mkdir } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { createRequire } from 'node:module'
@@ -111,6 +112,46 @@ async function capture(page, dest, options = {}) {
   console.log(`✓ ${dest.replace(`${root}/`, '')}`)
 }
 
+async function captureSection(page, dest, section) {
+  await section.scrollIntoViewIfNeeded()
+  await section.waitFor()
+  const box = await section.boundingBox()
+  if (!box) throw new Error(`Section for ${dest} is not visible`)
+  await capture(page, dest, {
+    clip: {
+      x: Math.max(0, box.x - 8),
+      y: Math.max(0, box.y - 8),
+      width: Math.min(1280, box.width + 16),
+      height: box.height + 16,
+    },
+  })
+}
+
+async function loginAlice(page, context) {
+  await context.clearCookies()
+  await login(page, { email: 'alice@example.com', password: 'hashedpassword1' })
+}
+
+async function openNewProjectWizard(page) {
+  await page.goto(appUrl('/dashboard'), { waitUntil: 'networkidle' })
+  await page.evaluate(() => localStorage.removeItem('new-project-draft'))
+  await page.reload({ waitUntil: 'networkidle' })
+  await page.getByRole('button', { name: '+ New project' }).click()
+  await page.getByRole('heading', { name: 'Essentials' }).waitFor()
+}
+
+async function openOutreachDraft(page) {
+  await page.goto(appUrl(`/projects/${PROJECT_ALPHA_UUID}`), { waitUntil: 'networkidle' })
+  await page.getByRole('radio', { name: 'outreach' }).click({ force: true })
+  await page.getByRole('radio', { name: 'outreach' }).waitFor()
+  const newMessage = page.getByRole('button', { name: 'New message' }).first()
+  if (await newMessage.isVisible().catch(() => false)) {
+    await newMessage.click()
+    await page.getByRole('button', { name: 'Create draft' }).click()
+  }
+  await page.getByRole('heading', { name: /Draft to Acme Corp/i }).waitFor({ timeout: 45000 })
+}
+
 async function main() {
   let chromium
   try {
@@ -175,11 +216,8 @@ async function main() {
     {
       path: 'images/getting-started/project-wizard.png',
       run: async () => {
-        await context.clearCookies()
-        await login(page, { email: 'alice@example.com', password: 'hashedpassword1' })
-        await page.goto(appUrl('/dashboard'), { waitUntil: 'networkidle' })
-        await page.getByRole('button', { name: '+ New project' }).click()
-        await page.getByRole('heading', { name: 'Essentials' }).waitFor()
+        await loginAlice(page, context)
+        await openNewProjectWizard(page)
       },
     },
     {
@@ -204,18 +242,16 @@ async function main() {
       run: async () => {
         await page.goto(appUrl('/account'), { waitUntil: 'networkidle' })
         const section = page.locator('section').filter({ hasText: 'Data & Privacy' }).first()
-        await section.scrollIntoViewIfNeeded()
-        await section.waitFor()
-        const box = await section.boundingBox()
-        if (!box) throw new Error('Data & Privacy section not visible')
-        await capture(page, join(root, 'images/account/data-privacy.png'), {
-          clip: {
-            x: Math.max(0, box.x - 8),
-            y: Math.max(0, box.y - 8),
-            width: Math.min(1280, box.width + 16),
-            height: box.height + 16,
-          },
-        })
+        await captureSection(page, join(root, 'images/account/data-privacy.png'), section)
+        return 'handled'
+      },
+    },
+    {
+      path: 'images/account/default-location.png',
+      run: async () => {
+        await page.goto(appUrl('/account'), { waitUntil: 'networkidle' })
+        const section = page.locator('section').filter({ hasText: 'Default project location' }).first()
+        await captureSection(page, join(root, 'images/account/default-location.png'), section)
         return 'handled'
       },
     },
@@ -259,11 +295,8 @@ async function main() {
     {
       path: 'images/projects/project-wizard.png',
       run: async () => {
-        await context.clearCookies()
-        await login(page, { email: 'alice@example.com', password: 'hashedpassword1' })
-        await page.goto(appUrl('/dashboard'), { waitUntil: 'networkidle' })
-        await page.getByRole('button', { name: '+ New project' }).click()
-        await page.getByRole('heading', { name: 'Essentials' }).waitFor()
+        await loginAlice(page, context)
+        await openNewProjectWizard(page)
       },
     },
     {
@@ -289,17 +322,24 @@ async function main() {
     {
       path: 'images/outreach/new-message.png',
       run: async () => {
-        await context.clearCookies()
-        await login(page, { email: 'alice@example.com', password: 'hashedpassword1' })
-        await page.goto(appUrl(`/projects/${PROJECT_ALPHA_UUID}`), { waitUntil: 'networkidle' })
-        await page.getByRole('radio', { name: 'outreach' }).click({ force: true })
-        await page.getByRole('radio', { name: 'outreach' }).waitFor()
-        const newMessage = page.getByRole('button', { name: 'New message' }).first()
-        if (await newMessage.isVisible().catch(() => false)) {
-          await newMessage.click()
-          await page.getByRole('button', { name: 'Create draft' }).click()
+        await loginAlice(page, context)
+        await openOutreachDraft(page)
+      },
+    },
+    {
+      path: 'images/outreach/attach-files.png',
+      run: async () => {
+        await loginAlice(page, context)
+        await openOutreachDraft(page)
+        const attachButton = page.getByRole('button', { name: 'Attach files' }).first()
+        await attachButton.waitFor()
+        const fixture = join(tmpdir(), 'envoy-docs-sample-attachment.txt')
+        await writeFile(fixture, 'Sample notes to share with the contact.\n')
+        const fileInput = page.locator('#outreach-attachment-input')
+        if (await fileInput.count()) {
+          await fileInput.setInputFiles(fixture)
+          await page.getByText('Ready').first().waitFor({ timeout: 15000 }).catch(() => {})
         }
-        await page.getByRole('heading', { name: /Draft to Acme Corp/i }).waitFor({ timeout: 45000 })
       },
     },
     {
