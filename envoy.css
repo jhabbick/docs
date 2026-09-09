@@ -36,25 +36,38 @@ html.dark #sidebar [class*="pointer-events-none"][class*="rounded-full"] {
 }
 
 /* Screenshot pairs: foo.png (light) + foo-dark.png (dark).
-   Mintlify wraps <img> in [data-rmiz] { display: contents }, which can keep
-   Tailwind dark:hidden / dark:block from actually swapping screenshots. */
-img[src^="/images/"][src$=".png"] {
-  border-radius: 0.75rem;
+   Local mint serves /images/foo.png. Production rewrites to
+   https://mintcdn.com/.../images/foo.png?fit=max&auto=format and sets data-path. */
+img[src*="/images/"][src*=".png"],
+img[data-path^="images/"] {
+  border-radius: 0.75rem !important;
 }
-img[src*="-dark.png"] {
+
+[data-rmiz]:has(img[src*="/images/"]),
+[data-rmiz]:has(img[data-path^="images/"]) {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+img[src*="-dark.png"],
+img[data-path*="-dark.png"] {
   display: none !important;
 }
 
-html.dark img[src*="-dark.png"] {
+html.dark img[src*="-dark.png"],
+html.dark img[data-path*="-dark.png"] {
   display: block !important;
 }
 
-html.dark img[src$=".png"]:not([src*="-dark.png"]) {
+html.dark img[src*="/images/"][src*=".png"]:not([src*="-dark.png"]),
+html.dark img[data-path^="images/"]:not([data-path*="-dark.png"]) {
   display: none !important;
 }
 
 html:not(.dark) [data-rmiz]:has(img[src*="-dark.png"]),
-html.dark [data-rmiz]:has(img[src$=".png"]:not([src*="-dark.png"])) {
+html:not(.dark) [data-rmiz]:has(img[data-path*="-dark.png"]),
+html.dark [data-rmiz]:has(img[src*="/images/"][src*=".png"]:not([src*="-dark.png"])),
+html.dark [data-rmiz]:has(img[data-path^="images/"]:not([data-path*="-dark.png"])) {
   display: none !important;
 }
 
